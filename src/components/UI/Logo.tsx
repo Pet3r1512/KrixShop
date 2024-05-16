@@ -16,7 +16,7 @@ export default function Logo(props: any) {
         width={1000}
         height={1000}
         priority
-        className="h-[64px] w-auto hidden lg:block"
+        className="h-[64px] w-auto hidden md:block"
         {...props}
       />
       <Image
@@ -28,12 +28,12 @@ export default function Logo(props: any) {
         width={1000}
         height={1000}
         priority
-        className="h-[48px] w-auto lg:hidden"
+        className="h-[48px] w-auto md:hidden"
         {...props}
       />
       <Skeleton
         className={cn(
-          "w-[45.81px] h-[64px] lg:w-[155.11px] lg:h-[64px]",
+          "w-[45.81px] h-[64px] md:w-[155.11px] md:h-[64px]",
           loading ? "block" : "hidden"
         )}
       />
