@@ -6,11 +6,11 @@ import {
   NavigationMenuTrigger,
   NavigationMenuContent,
 } from "@radix-ui/react-navigation-menu";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 
-const shop = [
+export const shop = [
   {
     category: "Men",
     list: [
@@ -92,6 +92,7 @@ export default function NavBar() {
       href: "/contact",
     },
   ];
+
   return (
     <NavigationMenu className="hidden lg:block">
       <NavigationMenuList className="flex items-center gap-x-8 relative">
@@ -100,7 +101,7 @@ export default function NavBar() {
             return (
               <NavigationMenuItem key="shop-navs">
                 <NavigationMenuTrigger className="font-semibold text-xl flex items-center">
-                  {t("shop")} <ChevronDown />
+                  {t(`${nav.name}`)} <ChevronDown />
                 </NavigationMenuTrigger>
                 <NavigationMenuContent className="grid grid-rows-2 grid-flow-col p-4 shadow-2xl rounded-xl absolute -left-[50%] mt-8 h-[550px] w-[950px]">
                   {shop.map((item) => {
