@@ -44,14 +44,14 @@ export default function LangChange() {
           setOpen(!open);
         }}
       >
-        <div className="flex items-center gap-x-2 font-semibold justify-between w-[150px] py-2 px-2.5 shadow-xl rounded-xl">
-          {currentLang.lang}{" "}
+        <div className="flex items-center gap-x-2 lg:text-base text-sm font-semibold justify-between w-[60px] lg:w-[150px] lg:py-2 lg:px-2.5 py-1.5 px-2 shadow-xl rounded-xl">
+          <p className="hidden md:block">{currentLang.lang} </p>
           <div className="flex items-center">
             <Image
               src={`/images/lang/${currentLang.img}`}
               width={1000}
               height={1000}
-              className="w-6 h-6"
+              className="size-6"
               alt=""
             />
             <ChevronDown />
@@ -63,7 +63,7 @@ export default function LangChange() {
           return (
             <DropdownMenuItem
               key={lang.locale}
-              className="flex items-center gap-x-2 font-semibold justify-between cursor-pointer"
+              className="flex items-center gap-x-2 text-sm lg:text-base font-semibold justify-between cursor-pointer"
               onClick={() => {
                 setCurrentLang(lang);
                 router.push(router.pathname, router.pathname, {
@@ -77,7 +77,7 @@ export default function LangChange() {
                 src={`/images/lang/${lang.img}`}
                 width={1000}
                 height={1000}
-                className="w-6 h-6"
+                className="lg:w-6 lg:h-6 size-4"
                 alt=""
               />
             </DropdownMenuItem>
