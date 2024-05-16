@@ -63,7 +63,7 @@ export default function Sidebar() {
             );
           }
           return (
-            <Link className="font-semibold py-4" href={nav.href}>
+            <Link key={index} className="font-semibold py-4" href={nav.href}>
               {nav.name}
             </Link>
           );
@@ -78,7 +78,7 @@ function ShopAccordion() {
     <Accordion type="single" collapsible className="w-full">
       {shop.map((section, index) => {
         return (
-          <AccordionItem value={`item-${index + 1}`}>
+          <AccordionItem key={index} value={`item-${index + 1}`}>
             <AccordionTrigger className="font-semibold">
               {section.category}
             </AccordionTrigger>
