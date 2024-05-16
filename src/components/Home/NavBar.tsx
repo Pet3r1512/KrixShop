@@ -98,7 +98,7 @@ export default function NavBar() {
         {navs.map((nav, index) => {
           if (index === 1) {
             return (
-              <NavigationMenuItem>
+              <NavigationMenuItem key="shop-navs">
                 <NavigationMenuTrigger className="font-semibold text-xl flex items-center">
                   {t("shop")} <ChevronDown />
                 </NavigationMenuTrigger>
