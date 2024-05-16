@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import Image from "next/image";
@@ -37,13 +38,13 @@ export default function LangChange() {
   const router = useRouter();
 
   return (
-    <DropdownMenu open={open}>
+    <DropdownMenu>
       <DropdownMenuTrigger
         onClick={() => {
-          setOpen(true);
+          setOpen(!open);
         }}
       >
-        <div className="flex items-center gap-x-2 font-semibold justify-between w-[150px] py-2 px-2.5">
+        <div className="flex items-center gap-x-2 font-semibold justify-between w-[150px] py-2 px-2.5 shadow-xl rounded-xl">
           {currentLang.lang}{" "}
           <div className="flex items-center">
             <Image
@@ -60,7 +61,8 @@ export default function LangChange() {
       <DropdownMenuContent className="flex flex-col gap-y-3.5">
         {langs.map((lang) => {
           return (
-            <div
+            <DropdownMenuItem
+              key={lang.locale}
               className="flex items-center gap-x-2 font-semibold justify-between cursor-pointer"
               onClick={() => {
                 setCurrentLang(lang);
@@ -78,7 +80,7 @@ export default function LangChange() {
                 className="w-6 h-6"
                 alt=""
               />
-            </div>
+            </DropdownMenuItem>
           );
         })}
       </DropdownMenuContent>
