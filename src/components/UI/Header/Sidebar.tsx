@@ -84,7 +84,11 @@ function ShopAccordion() {
             </AccordionTrigger>
             <AccordionContent className="flex flex-col gap-y-3.5">
               {section.list.map((link) => {
-                return <Link href="">{link}</Link>;
+                return (
+                  <Link key={link} href="">
+                    {link}
+                  </Link>
+                );
               })}
             </AccordionContent>
           </AccordionItem>
