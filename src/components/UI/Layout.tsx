@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import Head from "next/head";
 import { ReactNode } from "react";
+import Header from "./Header";
 
 export default function Layout({
   children,
@@ -24,6 +25,7 @@ export default function Layout({
           mainClassName
         )}
       >
+        <Header />
         {children}
       </main>
     </>
