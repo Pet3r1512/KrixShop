@@ -132,7 +132,10 @@ export default function NavBar() {
             );
           }
           return (
-            <NavigationMenuItem className="font-semibold text-xl">
+            <NavigationMenuItem
+              key={nav.name}
+              className="font-semibold text-xl"
+            >
               <Link href={nav.href}>{nav.name}</Link>
             </NavigationMenuItem>
           );
