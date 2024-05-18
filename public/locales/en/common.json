@@ -3,5 +3,9 @@
     "shop": "Shop",
     "about": "Our Story",
     "blog": "Blog",
-    "contact": "Contact Us"
+    "contact": "Contact Us",
+    "hero": {
+        "sale": "Sale Upto 40%",
+        "button": "Shop Now"
+    }
 }

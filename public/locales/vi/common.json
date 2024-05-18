@@ -3,5 +3,9 @@
     "shop": "Cửa Hàng",
     "about": "Về Chúng Tôi",
     "blog": "Blog",
-    "contact": "Liên Hệ"
+    "contact": "Liên Hệ",
+    "hero": {
+        "sale": "Giảm giá lên đến 40%",
+        "button": "Mua Ngay"
+    }
 }

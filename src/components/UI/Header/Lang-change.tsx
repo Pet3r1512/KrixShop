@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,6 +8,7 @@ import {
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { useRouter } from "next/router";
+import { useCookies } from "react-cookie";
 
 type currentLang = {
   lang: string;
@@ -17,9 +18,9 @@ type currentLang = {
 
 export default function LangChange() {
   const [currentLang, setCurrentLang] = useState<currentLang>({
-    lang: "Tiếng Việt",
-    img: "vietnam.png",
-    locale: "vi",
+    lang: "",
+    img: "",
+    locale: "",
   });
   const [open, setOpen] = useState(false);
   const langs = [
@@ -36,6 +37,23 @@ export default function LangChange() {
   ];
 
   const router = useRouter();
+  const [cookies, setCookie] = useCookies(["locale"]);
+
+  useEffect(() => {
+    console.log(cookies.locale);
+    if (cookies.locale === "en") {
+      setCurrentLang({
+        lang: "English",
+        img: "english.png",
+        locale: "en",
+      });
+    } else
+      setCurrentLang({
+        lang: "Tiếng Việt",
+        img: "vietnam.png",
+        locale: "vi",
+      });
+  }, []);
 
   return (
     <DropdownMenu>
@@ -44,7 +62,7 @@ export default function LangChange() {
           setOpen(!open);
         }}
       >
-        <div className="flex items-center gap-x-2 lg:text-base text-sm font-semibold justify-between w-[60px] lg:w-[150px] lg:py-2 lg:px-2.5 py-1.5 px-2 shadow-xl rounded-xl">
+        <div className="flex items-center gap-x-2 lg:text-base text-sm font-semibold justify-between w-[60px] md:w-[150px] lg:py-2 lg:px-2.5 py-1.5 px-2 shadow-xl rounded-xl">
           <p className="hidden md:block">{currentLang.lang} </p>
           <div className="flex items-center">
             <Image
@@ -69,6 +87,7 @@ export default function LangChange() {
                 router.push(router.pathname, router.pathname, {
                   locale: lang.locale,
                 });
+                setCookie("locale", lang.locale, {});
                 setOpen(false);
               }}
             >
