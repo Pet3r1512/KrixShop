@@ -5,7 +5,7 @@ import Sidebar from "./Sidebar";
 
 export default function Header() {
   return (
-    <section className="flex items-center justify-between">
+    <section className="flex items-center justify-between px-3.5 lg:px-0">
       <Sidebar />
       <Logo />
       <NavBar />
