@@ -8,7 +8,7 @@ export default function Hero() {
   const flipwords = ["Collection", "Styles", "Fashion"];
   const { t } = useTranslation("common");
   return (
-    <section className="lg:min-h-[50dvh] w-full bg-[#F3F3F3] antialiased flex items-center justify-between pl-2 pr-0 lg:px-16 relative overflow-hidden lg:rounded-xl shadow-2xl">
+    <section className="lg:min-h-[50dvh] w-full bg-[#F3F3F3] antialiased flex items-center justify-between pl-2 pr-0 lg:pl-16 lg:pr-4 relative overflow-hidden lg:rounded-xl shadow-2xl z-0">
       <Spotlight
         className="-top-40 left-0 md:left-60 md:-top-20 !z-20"
         fill="#dda15e"
@@ -35,7 +35,7 @@ export default function Hero() {
         width={500}
         height={500}
         priority
-        className="w-1/2 !lg:h-2/3 lg:w-auto z-10"
+        className="w-1/2 !lg:h-2/3 lg:w-auto lg:max-w-1/2 z-10"
       />
       <p className="font-bold text-white absolute bottom-4 right-[5%] text-3xl lg:text-7xl">
         KRIST SHOP
