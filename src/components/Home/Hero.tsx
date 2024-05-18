@@ -2,9 +2,11 @@ import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { FlipWords } from "../UI/ui/aceternity/flip-words";
 import { Spotlight } from "../UI/ui/aceternity/spotlight";
+import { useTranslation } from "next-i18next";
 
 export default function Hero() {
   const flipwords = ["Collection", "Styles", "Fashion"];
+  const { t } = useTranslation("common");
   return (
     <section className="lg:min-h-[50dvh] w-full bg-[#F3F3F3] antialiased flex items-center justify-between pl-2 pr-0 lg:px-16 relative overflow-hidden lg:rounded-xl shadow-2xl">
       <Spotlight
@@ -21,10 +23,10 @@ export default function Hero() {
               className="-ml-2 lg:ml-0 text-primary"
             />
           </div>
-          <p className="text-lg lg:text-2xl">Upto 40%</p>
+          <p className="text-lg lg:text-2xl">{t("hero.sale")}</p>
         </div>
         <button className="text-base lg:text-xl gap-x-1 lg:gap-x-1.5 flex items-center bg-primary text-white lg:hover:bg-white w-fit lg:px-2.5 lg:pb-2 lg:pt-1.5 px-1.5 pb-1 pt-0.5 rounded-lg border-2 border-primary font-semibold lg:hover:border-primary lg:hover:text-primary duration-150 ease-linear">
-          Shop now <ArrowRight size={16} className="mt-[2.5px]" />
+          {t("hero.button")} <ArrowRight size={16} className="mt-[2.5px]" />
         </button>
       </div>
       <Image
