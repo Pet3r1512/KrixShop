@@ -37,7 +37,7 @@ export default function Sidebar() {
   ];
   return (
     <Drawer direction="left">
-      <DrawerTrigger className="lg:hidden w-[60px]">
+      <DrawerTrigger className="lg:hidden w-[60px] md:w-[150px]">
         <Menu />
       </DrawerTrigger>
       <DrawerContent className="h-screen w-2/3 px-2.5 py-2 flex flex-col">
