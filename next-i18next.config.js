@@ -6,7 +6,7 @@ const nextI18Config = {
   i18n: {
     defaultLocale: "vi",
     locales: ["en", "vi"],
-    localeDetection: false,
+    localeDetection: true,
   },
   react: { useSuspense: false },
   localePath:

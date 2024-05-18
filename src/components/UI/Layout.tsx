@@ -1,9 +1,11 @@
 import { cn } from "@/lib/utils";
 import Head from "next/head";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import Header from "./Header";
 import React from "react";
 React.useLayoutEffect = React.useEffect;
+import { useRouter } from "next/router";
+import { useCookies } from "react-cookie";
 
 export default function Layout({
   children,
@@ -14,7 +16,18 @@ export default function Layout({
   mainClassName?: string;
   pageName?: string;
 }) {
+  const [cookies, setCookie, removeCookie] = useCookies(["locale"]);
   let fullPageName = `Krist Shop | ${pageName}`;
+
+  const router = useRouter();
+
+  useEffect(() => {
+    cookies.locale
+      ? router.push(router.pathname, router.pathname, {
+          locale: cookies.locale,
+        })
+      : {};
+  }, []);
 
   return (
     <>
