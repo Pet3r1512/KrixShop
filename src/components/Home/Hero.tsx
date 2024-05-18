@@ -15,7 +15,7 @@ export default function Hero() {
         <div className="flex flex-col gap-y-2">
           <p className="text-lg lg:text-2xl font-semibold">Classic Exclusive</p>
           <div className="text-3xl lg:text-6xl font-bold z-20">
-            <span>Women's</span>
+            <span>{`Women's`}</span>
             <FlipWords
               words={flipwords}
               className="-ml-2 lg:ml-0 text-primary"
