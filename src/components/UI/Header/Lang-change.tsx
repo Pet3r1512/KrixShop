@@ -40,7 +40,6 @@ export default function LangChange() {
   const [cookies, setCookie] = useCookies(["locale"]);
 
   useEffect(() => {
-    console.log(cookies.locale);
     if (cookies.locale === "en") {
       setCurrentLang({
         lang: "English",

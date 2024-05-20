@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://Thanh-Phong-s-workspace-na9p0r.us-east-1.xata.sh/db/krist-shop",
+  "codegen": {
+    "output": "src/xata.ts"
+  }
+}

@@ -34,7 +34,12 @@ export default function Layout({
       <Head>
         <title>{fullPageName}</title>
       </Head>
-      <main className={cn("max-w-7xl mx-auto lg:py-6 py-5", mainClassName)}>
+      <main
+        className={cn(
+          "max-w-7xl mx-auto lg:py-6 py-5 scrollbar-hide",
+          mainClassName
+        )}
+      >
         <div className="flex flex-col gap-y-5">
           <Header />
           {children}
