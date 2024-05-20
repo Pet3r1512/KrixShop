@@ -21,6 +21,7 @@
     "@trpc/next": "^11.0.0-rc.373",
     "@trpc/react-query": "^11.0.0-rc.373",
     "@trpc/server": "^11.0.0-rc.373",
+    "@xata.io/cli": "0.15.14",
     "@xata.io/client": "^0.0.0-next.ve109eeeef360444eb9f061f3d745eed662493f78",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
