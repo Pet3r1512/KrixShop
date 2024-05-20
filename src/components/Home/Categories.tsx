@@ -24,8 +24,11 @@ export default function Categories() {
 
   useEffect(() => {
     setProducts(productsQuery.data?.products!);
-    setLoading(productsQuery.isFetching);
-  }, [productsQuery]);
+  }, [productsQuery.data]);
+
+  useEffect(() => {
+    setLoading(productsQuery.isLoading);
+  }, [productsQuery.isLoading]);
 
   return (
     <section
