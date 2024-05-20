@@ -30,7 +30,7 @@ const tables = [
         notNull: true,
         unique: true,
         defaultValue:
-          "nextval('bb_urlee3tasl3cfbitohq27bkqf4_na9p0r.\"Categories_id_seq\"'::regclass)",
+          "nextval('bb_lhgfq0flrd15n0b6qsvf0qd3c0_na9p0r.\"Categories_id_seq\"'::regclass)",
         comment: "",
       },
       {
@@ -87,10 +87,6 @@ const tables = [
 
 export type SchemaTables = typeof tables;
 export type InferredTypes = SchemaInference<SchemaTables>;
-
-export type Categories = InferredTypes["Categories"];
-export type CategoriesRecord = Categories & XataRecord;
-
 export type DatabaseSchema = {
   Categories: CategoriesRecord;
 };
@@ -114,3 +110,6 @@ export class XataClient extends DatabaseClient<DatabaseSchema> {
     );
   }
 }
+
+export type Categories = InferredTypes["Categories"];
+export type CategoriesRecord = Categories & XataRecord;
