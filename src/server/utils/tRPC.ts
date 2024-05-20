@@ -28,6 +28,12 @@ export const trpc = createTRPCNext<AppRouter>({
            **/
           url: `${getBaseUrl()}/api/trpc`,
           // You can pass any HTTP headers you wish here
+          fetch(url, options) {
+            return fetch(url, {
+              ...options,
+              credentials: "include",
+            });
+          },
           async headers() {
             return {
               // authorization: getAuthCookie(),
