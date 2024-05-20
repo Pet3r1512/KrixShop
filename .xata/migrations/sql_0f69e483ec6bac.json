@@ -1,0 +1,17 @@
+{
+  "done": true,
+  "migration": {
+    "name": "sql_0f69e483ec6bac",
+    "operations": [
+      {
+        "sql": {
+          "up": "ALTER TABLE \"Categories\" DROP CONSTRAINT \"Categories_pkey\", DROP id, ADD COLUMN id serial NOT NULL, ADD CONSTRAINT \"Categories_pkey\" PRIMARY KEY (id)"
+        }
+      }
+    ]
+  },
+  "migrationType": "inferred",
+  "name": "sql_0f69e483ec6bac",
+  "parent": "sql_d7271cb0bc900a",
+  "startedAt": "2024-05-18T13:56:25.319671Z"
+}
