@@ -87,10 +87,6 @@ const tables = [
 
 export type SchemaTables = typeof tables;
 export type InferredTypes = SchemaInference<SchemaTables>;
-
-export type Categories = InferredTypes["Categories"];
-export type CategoriesRecord = Categories & XataRecord;
-
 export type DatabaseSchema = {
   Categories: CategoriesRecord;
 };
@@ -114,3 +110,6 @@ export class XataClient extends DatabaseClient<DatabaseSchema> {
     );
   }
 }
+
+export type Categories = InferredTypes["Categories"];
+export type CategoriesRecord = Categories & XataRecord;

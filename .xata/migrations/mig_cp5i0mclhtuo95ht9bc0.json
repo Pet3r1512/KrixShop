@@ -1,0 +1,18 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cp5i0mclhtuo95ht9bc0",
+    "operations": [
+      {
+        "drop_column": {
+          "table": "Categories",
+          "column": "test"
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cp5i0mclhtuo95ht9bc0",
+  "parent": "mig_cp5i0jc2a0mp8q8v1fvg",
+  "startedAt": "2024-05-20T10:05:14.03462Z"
+}
