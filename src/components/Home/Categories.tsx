@@ -47,7 +47,10 @@ export default function Categories() {
           ) : (
             products.map((product) => {
               return (
-                <CarouselItem className="basis-1/2 md:basis-1/4">
+                <CarouselItem
+                  key={product.id}
+                  className="basis-1/2 md:basis-1/4"
+                >
                   <CategoryCard
                     key={product.id}
                     name={product.name}
