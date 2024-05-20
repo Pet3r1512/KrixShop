@@ -15,9 +15,9 @@ export default function CategoryCard({
     : name.split("-")[1];
   return (
     <CardContainer className="inter-var">
-      <CardBody className="bg-gray relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] h-[300px] lg:h-[500px] max-w-[150px] w-auto lg:max-w-[350px] rounded-xl border overflow-hidden">
-        <p className="font-bold text-primary absolute md:top-5 lg:top-10 left-[50px] text-3xl lg:text-[120px]">
-          {product_name}
+      <CardBody className="bg-gray relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] h-[300px] lg:h-[500px] max-w-[185px] w-auto lg:max-w-[350px] rounded-xl border overflow-hidden">
+        <p className="font-bold text-primary absolute md:top-5 lg:top-10 left-[80px] text-3xl lg:text-[120px] opacity-60">
+          KRIST
         </p>
         <CardItem translateZ="100" className="w-full mt-4">
           <Image
