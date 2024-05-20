@@ -17,5 +17,5 @@ datasource db {
 model Categories {
   id    Int    @id @default(autoincrement())
   name  String
-  image String
+  image String @unique
 }

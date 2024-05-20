@@ -30,7 +30,7 @@ const tables = [
         notNull: true,
         unique: true,
         defaultValue:
-          "nextval('bb_khos1prc2t5q3eiqu3r7k8k9vc_na9p0r.\"Categories_id_seq\"'::regclass)",
+          "nextval('bb_915fuu3edh5ebdu2cdvrciflns_na9p0r.\"Categories_id_seq\"'::regclass)",
         comment: "",
       },
       {
