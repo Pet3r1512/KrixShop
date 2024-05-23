@@ -1,22 +1,55 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Categories {
-  id    Int    @id @default(autoincrement())
-  name  String
-  image String
+  id             Int      @id @default(autoincrement())
+  name           String   @unique
+  image          String
+  xata_id        String   @unique(map: "Categories__pgroll_new_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_version   Int      @default(0)
+  xata_createdat DateTime @default(now()) @db.Timestamptz(6)
+  xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
+}
+
+model Products {
+  id             Int            @id @default(autoincrement())
+  product_name   String         @unique
+  price          Int
+  category       String
+  class          String
+  color          String[]
+  type           String?
+  clothes_size   String[]
+  footwear_size  Int[]
+  image          String         @unique
+  description    String
+  rated          Int
+  reviews        Int
+  quantity       Int
+  xata_id        String         @unique(map: "Products__pgroll_new_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_version   Int            @default(0)
+  xata_createdat DateTime       @default(now()) @db.Timestamptz(6)
+  xata_updatedat DateTime       @default(now()) @db.Timestamptz(6)
+  color_quantity ProductColor[]
+}
+
+model ProductColor {
+  id             Int      @id @default(autoincrement())
+  productId      Int
+  color          String
+  quantity       Int
+  xata_id        String   @unique(map: "ProductColor__pgroll_new_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_version   Int      @default(0)
+  xata_createdat DateTime @default(now()) @db.Timestamptz(6)
+  xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
+  product        Products @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, color])
 }
