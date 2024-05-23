@@ -18,6 +18,17 @@ export const productRouter = router({
       return { products: products };
     }
   }),
+  getProducts: publicProcedure.query(async () => {
+    prisma.$connect();
+    const products = await prisma.products.findMany();
+    prisma.$disconnect();
+
+    if (products) {
+      return { message: true, products: products };
+    } else {
+      return { message: false, products: [] };
+    }
+  }),
 });
 
 export type AppRouter = typeof productRouter;
