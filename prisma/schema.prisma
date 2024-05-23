@@ -22,12 +22,10 @@ model Products {
   id             Int            @id @default(autoincrement())
   product_name   String         @unique
   price          Int
+  saleoff        Int?
   category       String
   class          String
   color          String[]
-  type           String?
-  clothes_size   String[]
-  footwear_size  Int[]
   image          String         @unique
   description    String
   rated          Int
@@ -37,6 +35,9 @@ model Products {
   xata_version   Int            @default(0)
   xata_createdat DateTime       @default(now()) @db.Timestamptz(6)
   xata_updatedat DateTime       @default(now()) @db.Timestamptz(6)
+  type           String
+  footwear_size  Int?
+  clothes_size   String?
   color_quantity ProductColor[]
 }
 
