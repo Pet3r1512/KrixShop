@@ -16,7 +16,7 @@ export default function Layout({
   mainClassName?: string;
   pageName?: string;
 }) {
-  const [cookies, setCookie, removeCookie] = useCookies(["locale"]);
+  const [cookies] = useCookies(["locale"]);
   let fullPageName = `Krist Shop | ${pageName}`;
 
   const router = useRouter();

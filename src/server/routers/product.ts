@@ -20,7 +20,9 @@ export const productRouter = router({
   }),
   getProducts: publicProcedure.query(async () => {
     prisma.$connect();
-    const products = await prisma.products.findMany();
+    const products = await prisma.products.findMany({
+      include: { color_quantity: true },
+    });
     prisma.$disconnect();
 
     if (products) {
