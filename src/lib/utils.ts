@@ -16,4 +16,20 @@ export function formatCurrency(money: string): string {
 
   // Format the number as currency
   return amount.toLocaleString("it-IT", { style: "currency", currency: "VND" });
+
+  {
+    /* {!product.saleoff ? (
+            <></>
+          ) : (
+            <p className="text-[#adb5bd] relative z-0 w-fit">
+              {formatCurrency(
+                (product.saleoff
+                  ? (product.price * (100 - product.saleoff)) / 100
+                  : product.price
+                ).toString()
+              )}
+              <span className="w-full h-[0.5px] bg-[#adb5bd] absolute left-0 top-1/2 -translate-y-1/2"></span>
+            </p>
+          )} */
+  }
 }
