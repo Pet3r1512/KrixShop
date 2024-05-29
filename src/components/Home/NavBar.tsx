@@ -118,10 +118,11 @@ export default function NavBar() {
                         </p>
                         <div className="flex flex-col gap-y-2.5 py-2 px-1.5 rounded-lg">
                           {item.list.map((i) => {
-                            const itemSlug = i.toLowerCase().replace(/ /g, "-");
-                            const categorySlug = item.category
-                              .toLowerCase()
-                              .replace(/ /g, "-");
+                            const itemSlug = i.replace(/ /g, "-");
+                            const categorySlug = item.category.replace(
+                              / /g,
+                              "-"
+                            );
                             return (
                               <Link
                                 href={`/shop/${categorySlug}/${itemSlug}`}
