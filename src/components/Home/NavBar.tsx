@@ -101,7 +101,7 @@ export default function NavBar() {
             return (
               <NavigationMenuItem key="shop-navs">
                 <NavigationMenuTrigger className="font-semibold text-xl flex items-center">
-                  {t(`${nav.name}`)} <ChevronDown />
+                  {t("shop")} <ChevronDown />
                 </NavigationMenuTrigger>
                 <NavigationMenuContent className="grid grid-rows-2 grid-flow-col p-4 shadow-2xl rounded-xl absolute -left-[50%] mt-8 h-[550px] w-[950px] z-10 bg-white">
                   {shop.map((item) => {
@@ -118,10 +118,19 @@ export default function NavBar() {
                         </p>
                         <div className="flex flex-col gap-y-2.5 py-2 px-1.5 rounded-lg">
                           {item.list.map((i) => {
+                            const itemSlug = i.replace(/ /g, "-");
+                            const categorySlug = item.category.replace(
+                              / /g,
+                              "-"
+                            );
                             return (
-                              <p className="lg:hover:shadow-xl p-1.5" key={i}>
+                              <Link
+                                href={`/shop/${categorySlug}/${itemSlug}`}
+                                className="lg:hover:shadow-xl p-1.5 cursor-pointer"
+                                key={i}
+                              >
                                 {i}
-                              </p>
+                              </Link>
                             );
                           })}
                         </div>

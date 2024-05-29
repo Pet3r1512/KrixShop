@@ -27,8 +27,8 @@ export default function Categories() {
   }, [productsQuery.data]);
 
   useEffect(() => {
-    setLoading(productsQuery.isLoading);
-  }, [productsQuery.isLoading]);
+    setLoading(productsQuery.isSuccess ? false : true);
+  }, [productsQuery.isSuccess]);
 
   return (
     <section

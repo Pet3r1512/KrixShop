@@ -8,6 +8,18 @@ const nextI18Config = {
     locales: ["en", "vi"],
     localeDetection: false,
   },
+  detection: {
+    order: [
+      "cookie",
+      "querystring",
+      "localStorage",
+      "navigator",
+      "htmlTag",
+      "path",
+      "subdomain",
+    ],
+    caches: ["cookie"],
+  },
   react: { useSuspense: false },
   localePath:
     typeof window === "undefined"
