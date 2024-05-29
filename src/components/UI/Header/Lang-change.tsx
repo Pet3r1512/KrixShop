@@ -37,10 +37,10 @@ export default function LangChange() {
   ];
 
   const router = useRouter();
-  const [cookies, setCookie] = useCookies(["locale"]);
+  const [cookies, setCookie] = useCookies(["NEXT_LOCALE"]);
 
   useEffect(() => {
-    if (cookies.locale === "en") {
+    if (cookies.NEXT_LOCALE === "en") {
       setCurrentLang({
         lang: "English",
         img: "english.png",
@@ -83,10 +83,10 @@ export default function LangChange() {
               className="flex items-center gap-x-2 text-sm lg:text-base font-semibold justify-between cursor-pointer"
               onClick={() => {
                 setCurrentLang(lang);
+                setCookie("NEXT_LOCALE", lang.locale, { path: "/" });
                 router.push(router.pathname, router.pathname, {
                   locale: lang.locale,
                 });
-                setCookie("locale", lang.locale, {});
                 setOpen(false);
               }}
             >
