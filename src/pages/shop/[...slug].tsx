@@ -30,7 +30,6 @@ export default function ProductPage() {
       category: router.asPath.split("/")[2],
       type: router.asPath.split("/")[3],
     });
-    console.log(params);
   }, [router.asPath]);
 
   return (
