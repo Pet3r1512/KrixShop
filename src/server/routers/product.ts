@@ -32,14 +32,14 @@ export const productRouter = router({
       return { message: false, products: [] };
     }
   }),
-  getProductsByCategoryAndClass: publicProcedure
-    .input(z.object({ category: z.string(), class: z.string() }))
+  getProductsByCategoryAndType: publicProcedure
+    .input(z.object({ category: z.string(), type: z.string() }))
     .query(async ({ input }) => {
       prisma.$connect();
       const productsByCategory = await prisma.products.findMany({
         where: {
           category: input.category,
-          class: input.class,
+          class: input.type,
         },
       });
       prisma.$disconnect();
@@ -48,7 +48,7 @@ export const productRouter = router({
         return {
           message: true,
           category: input.category,
-          class: input.class,
+          class: input.type,
           products: productsByCategory,
         };
       } else {
