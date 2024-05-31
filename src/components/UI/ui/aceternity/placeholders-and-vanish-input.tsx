@@ -203,7 +203,7 @@ export function PlaceholdersAndVanishInput({
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="text-gray-300 h-4 w-4"
+          className="text-gray-300 h-4 w-4 mr-[2.5px] md:mr-[2.65px]"
         >
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
           <motion.path

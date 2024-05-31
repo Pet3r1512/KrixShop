@@ -7,13 +7,11 @@ export default function Subscribe() {
     "Notify for new releases",
   ];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("submitted");
   };
+
   return (
     <div className="lg:w-1/3 flex flex-col gap-y-3">
       <p className="font-bold text-xl">Subscribe</p>
