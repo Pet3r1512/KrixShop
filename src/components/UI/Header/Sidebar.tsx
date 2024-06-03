@@ -84,8 +84,10 @@ function ShopAccordion() {
             </AccordionTrigger>
             <AccordionContent className="flex flex-col gap-y-3.5">
               {section.list.map((link) => {
+                const itemSlug = link.replace(/ /g, "-");
+                const categorySlug = section.category.replace(/ /g, "-");
                 return (
-                  <Link key={link} href="">
+                  <Link key={link} href={`/shop/${categorySlug}/${itemSlug}`}>
                     {link}
                   </Link>
                 );
