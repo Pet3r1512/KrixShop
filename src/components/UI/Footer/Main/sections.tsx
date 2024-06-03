@@ -7,7 +7,7 @@ export default function SectionNav() {
       href: "",
     },
     {
-      name: "LogIn",
+      name: "Sign In",
       href: "",
     },
     {
