@@ -32,7 +32,7 @@ export default function CategoryCard({
           href={`/shop/${name.toLowerCase().split("-")[0]}/${
             name.toLowerCase().split("-")[1]
           }`}
-          className="flex justify-center absolute bottom-4 lg:bottom-6 left-1/2 -translate-x-1/2 w-4/5 bg-white text-black font-semibold lg:font-bold text-base lg:text-2xl shadow-2xl px-2 pb-1.5 pt-1 lg:px-2.5 lg:pb-2 lg:pt-1.5 rounded-lg"
+          className="flex justify-center absolute bottom-4 lg:bottom-6 left-1/2 -translate-x-1/2 w-4/5 bg-white text-black font-semibold lg:font-bold text-base lg:text-2xl shadow-2xl px-2 pb-1.5 pt-1 lg:px-2.5 lg:pb-2 lg:pt-1.5 rounded-lg truncate"
         >
           {name}
         </Link>
