@@ -9,7 +9,7 @@ import {
 } from "../ui/accordion";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
-import { AccordionHeader } from "@radix-ui/react-accordion";
+import { useState } from "react";
 
 export default function Sidebar() {
   const { t } = useTranslation("common");
@@ -40,7 +40,7 @@ export default function Sidebar() {
       <DrawerTrigger className="lg:hidden mr-9 md:mr-32">
         <Menu />
       </DrawerTrigger>
-      <DrawerContent className="h-screen w-2/3 px-2.5 py-2 flex flex-col">
+      <DrawerContent className="h-full w-2/3 px-2.5 py-2 flex flex-col">
         <p className="text-2xl font-extrabold mb-8">Menu</p>
         {navs.map((nav, index) => {
           if (index === 1) {
@@ -55,7 +55,7 @@ export default function Sidebar() {
                   <AccordionTrigger className="font-semibold">
                     {nav.name}
                   </AccordionTrigger>
-                  <AccordionContent className="pl-5">
+                  <AccordionContent className="pl-3">
                     <ShopAccordion />
                   </AccordionContent>
                 </AccordionItem>
@@ -82,7 +82,7 @@ function ShopAccordion() {
             <AccordionTrigger className="font-semibold">
               {section.category}
             </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-y-3.5">
+            <AccordionContent className="flex flex-col gap-y-3.5 pl-3">
               {section.list.map((link) => {
                 const itemSlug = link.replace(/ /g, "-");
                 const categorySlug = section.category.replace(/ /g, "-");
