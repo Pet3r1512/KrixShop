@@ -40,7 +40,7 @@ export default function Sidebar() {
       <DrawerTrigger className="lg:hidden mr-9 md:mr-32">
         <Menu />
       </DrawerTrigger>
-      <DrawerContent className="h-full w-2/3 px-2.5 py-2 flex flex-col">
+      <DrawerContent className="h-full w-2/3 px-2.5 py-2 md:px-8 md:py-5 flex flex-col">
         <p className="text-2xl font-extrabold mb-8">Menu</p>
         {navs.map((nav, index) => {
           if (index === 1) {
