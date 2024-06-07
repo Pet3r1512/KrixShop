@@ -51,7 +51,7 @@ export default function ProductCard({ product }: { product: Product }) {
           height={1000}
           quality={50}
           priority
-          className="w-full lg:h-[300px] object-contain"
+          className="w-full h-[186.23px] md:h-[260.72px] lg:h-[300px] object-contain"
         />
         <div className="px-2.5 lg:px-0 flex flex-col gap-y-2.5 lg:gap-y-0.5">
           <p className="text-lg lg:text-xl font-semibold lg:font-bold lg:group-hover:invisible h-[49px] line-clamp-3 lg:h-none break-words">
