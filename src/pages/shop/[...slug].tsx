@@ -41,7 +41,7 @@ export default function ProductPage() {
   return (
     <Layout>
       {productsQuery.isSuccess && products.length === 0 && <p>Empty</p>}
-      <section className="grid md:grid-cols-3 gap-y-3.5 grid-cols-2 justify-center my-4 lg:my-0">
+      <section className="grid md:grid-cols-3 lg:grid-cols-4 gap-y-3.5 grid-cols-2 justify-center lg:py-16 py-4">
         {productsQuery.isLoading && !productsQuery.isError && (
           <>
             <Skeleton className="lg:w-64 w-40 md:w-56 lg:h-[392.75px] h-[275.84px] md:h-[349.97px] mx-auto lg:mx-0" />
