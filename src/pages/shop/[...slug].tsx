@@ -1,12 +1,13 @@
 import Layout from "@/components/UI/Layout";
 import { trpc } from "@/server/utils/tRPC";
 import { GetServerSideProps } from "next";
-import { useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/UI/ui/skeleton";
 import { useRouter } from "next/router";
 import ProductCard, { Product } from "@/components/Shop/Product-card";
 import EmptyProduct from "@/components/Shop/Empty-product";
+import Link from "next/link";
 
 export type Params = {
   category: string;
@@ -52,7 +53,11 @@ export default function ProductPage() {
         )}
         {productsQuery.isSuccess &&
           products.map((product: Product) => {
-            return <ProductCard key={product.product_name} product={product} />;
+            return (
+              <Link href={`/shop/item/${product.xata_id}`}>
+                <ProductCard key={product.product_name} product={product} />
+              </Link>
+            );
           })}
       </section>
     </Layout>
