@@ -84,10 +84,9 @@ export default function LangChange() {
               onClick={() => {
                 setCurrentLang(lang);
                 setCookie("NEXT_LOCALE", lang.locale, { path: "/" });
-                router.push(router.pathname, router.pathname, {
+                router.push(router.pathname, router.asPath, {
                   locale: lang.locale,
                 });
-                setOpen(false);
               }}
             >
               {lang.lang}{" "}
