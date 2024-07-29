@@ -6,6 +6,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Skeleton } from "@/components/UI/ui/skeleton";
 import { useRouter } from "next/router";
 import ProductCard, { Product } from "@/components/Shop/Product-card";
+import EmptyProduct from "@/components/Shop/Empty-product";
 
 export type Params = {
   category: string;
@@ -39,8 +40,8 @@ export default function ProductPage() {
   }, [router.asPath]);
 
   return (
-    <Layout>
-      {productsQuery.isSuccess && products.length === 0 && <p>Empty</p>}
+    <Layout pageName="Shop">
+      {productsQuery.isSuccess && products.length === 0 && <EmptyProduct />}
       <section className="grid md:grid-cols-3 lg:grid-cols-4 gap-y-3.5 grid-cols-2 justify-center lg:py-16 py-4">
         {productsQuery.isLoading && !productsQuery.isError && (
           <>
