@@ -14,6 +14,7 @@ export type Categories = {
 
 export type Product = {
   id: number;
+  xata_id: string;
   product_name: string;
   price: number;
   category: string;
