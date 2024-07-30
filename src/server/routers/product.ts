@@ -68,7 +68,7 @@ export const productRouter = router({
 
       if (product) {
         return { message: true, item: product };
-      } else return { message: false, item: undefined };
+      } else return { message: false, item: [] };
     }),
 });
 
