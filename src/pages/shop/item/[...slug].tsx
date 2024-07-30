@@ -74,6 +74,37 @@ export default function ItemDetail() {
               </p>
             </div>
             <p className="lg:text-xl">{productQuery.data.item.description}</p>
+            <div className="flex flex-col justify-center gap-y-2">
+              <p className="text-lg lg:text-xl font-semibold">Color</p>
+              <div className="flex items-center gap-x-3">
+                {productQuery.data.item.color.map((color) => {
+                  return (
+                    <div
+                      style={{
+                        backgroundColor: color,
+                      }}
+                      className={`size-10 rounded-lg ${
+                        color === "#fff" ||
+                        (color === "#FFF" && "border-2 border-black")
+                      }`}
+                    ></div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="flex flex-col justify-center gap-y-2">
+              <p className="text-lg lg:text-xl font-semibold">Size</p>
+              <div className="flex items-center gap-x-3">
+                {productQuery.data.item.clothes_size &&
+                  productQuery.data.item.clothes_size.split(",").map((size) => {
+                    return (
+                      <div className="flex items-center justify-center size-10 border-2 border-black rounded-lg font-semibold">
+                        {size}
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
           </div>
         </section>
       ) : (
