@@ -4,6 +4,8 @@ import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { trpc } from "@/server/utils/tRPC";
 import Image from "next/image";
+import { cn, formatCurrency } from "@/lib/utils";
+import SaleoffBadge from "@/components/Shop/SaleoffBadge";
 
 export default function ItemDetail() {
   const router = useRouter();
@@ -17,27 +19,82 @@ export default function ItemDetail() {
       {!productQuery.isLoading &&
       productQuery.isSuccess &&
       productQuery.data ? (
-        <section className="lg:my-16 lg:flex lg:flex-row lg:gap-x-24">
-          <div className="lg:w-2/5">
-            <Image
-              src={productQuery.data.item.image}
-              alt=""
-              width={1000}
-              height={1000}
-              quality={75}
-              priority
-            />
-          </div>
-          <div className="flex-1">
-            <p className="lg:text-5xl font-bold text-primary">
-              {productQuery.data.item.product_name}
-            </p>
+        <section className="lg:my-16 my-8 md:flex md:flex-row lg:gap-x-24 px-4 lg:px-0">
+          <Image
+            src={productQuery.data.item.image}
+            alt=""
+            width={1000}
+            height={1000}
+            quality={75}
+            priority
+            className="max-h-[350px] w-auto md:w-2/5 md:h-auto lg:w-2/5 lg:max-h-[600px] mx-auto lg:mx-0"
+          />
+          <div className="flex-1 flex flex-col gap-y-6 lg:gap-y-14">
+            <div className="flex justify-between items-center relative">
+              <p className="lg:text-5xl text-2xl font-bold text-primary w-1/2 lg:w-3/5 text-wrap">
+                {productQuery.data.item.product_name}
+              </p>
+              <div className="flex items-center gap-x-2">
+                {productQuery.data.item.saleoff && (
+                  <SaleoffBadge
+                    className="size-10 text-sm"
+                    saleoff={productQuery.data.item.saleoff}
+                  />
+                )}
+                {productQuery.data.item.quantity > 0 && <InStockBadge />}
+                {productQuery.data.item.quantity <= 0 && <OutStockBadge />}
+              </div>
+            </div>
+            <div className="flex items-center">
+              <p
+                className={cn(
+                  !productQuery.data.item.saleoff
+                    ? "hidden"
+                    : "text-black mr-4 text-xl lg:text-2xl font-bold"
+                )}
+              >
+                {formatCurrency(
+                  (
+                    productQuery.data.item.price -
+                    (productQuery.data.item.price *
+                      productQuery.data.item.saleoff!) /
+                      100
+                  ).toString()
+                )}
+              </p>
+              <p
+                className={cn(
+                  `lg:text-2xl font-bold`,
+                  productQuery.data.item.saleoff &&
+                    "text-slate-300 line-through lg:text-xl"
+                )}
+              >
+                {formatCurrency(productQuery.data.item.price.toString())}
+              </p>
+            </div>
+            <p className="lg:text-xl">{productQuery.data.item.description}</p>
           </div>
         </section>
       ) : (
-        <>No product found</>
+        <>Loading...</>
       )}
     </Layout>
+  );
+}
+
+function InStockBadge() {
+  return (
+    <button className="px-2.5 py-1.5 rounded-xl text-green-500 bg-green-100 font-semibold cursor-default">
+      In Stock
+    </button>
+  );
+}
+
+function OutStockBadge() {
+  return (
+    <button className="px-2.5 py-1.5 rounded-xl bg-red-100 text-red-600 font-semibold cursor-default">
+      Run Out
+    </button>
   );
 }
 
