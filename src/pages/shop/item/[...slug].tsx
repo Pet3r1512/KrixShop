@@ -18,11 +18,10 @@ export default function ItemDetail() {
     if (productQuery.isSuccess) {
       setProduct(productQuery.data.item!);
     }
-    console.log(product);
   }, [productQuery]);
 
   return (
-    <Layout>
+    <Layout pageName="Shop">
       {product ? <ProductCard key={product.id} product={product} /> : <></>}
     </Layout>
   );
