@@ -15,20 +15,20 @@ export type Categories = {
 export type Product = {
   id: number;
   xata_id: string;
-  product_name: string;
-  price: number;
   category: string;
   class: string;
+  clothes_size?: string | null;
   color: string[];
-  image: string;
   description: string;
+  footwear_size?: number | null;
+  image: string;
+  price: number;
+  product_name: string;
+  quantity: number;
   rated: number;
   reviews: number;
-  quantity: number;
-  type: string;
-  clothes_size?: string | null;
-  footwear_size?: number | null;
   saleoff?: number | null;
+  type: string;
   color_quantity: ProductColor[];
 };
 
