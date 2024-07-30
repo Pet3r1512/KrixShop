@@ -58,7 +58,7 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
       {product.saleoff !== null && product.saleoff > 0 && (
         <SaleoffBadge
-          className="absolute top-1.5 right-1.5 size-10 text-sm"
+          className="absolute -top-1.5 -left-1.5 size-10 text-sm"
           saleoff={product.saleoff}
         />
       )}
