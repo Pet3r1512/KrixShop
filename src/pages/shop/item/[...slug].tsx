@@ -6,6 +6,7 @@ import { trpc } from "@/server/utils/tRPC";
 import Image from "next/image";
 import { cn, formatCurrency } from "@/lib/utils";
 import SaleoffBadge from "@/components/Shop/SaleoffBadge";
+import ItemSkeleton from "@/components/Shop/Item/item-skeleton";
 
 export default function ItemDetail() {
   const router = useRouter();
@@ -16,9 +17,9 @@ export default function ItemDetail() {
 
   return (
     <Layout pageName="Shop">
-      {!productQuery.isLoading &&
-      productQuery.isSuccess &&
-      productQuery.data ? (
+      {!productQuery.isLoading && !productQuery.data ? (
+        <p className="text-xl font-semibold mt-16">Product is not existed!!!</p>
+      ) : productQuery.isSuccess && productQuery.data ? (
         <section className="lg:my-16 my-8 md:flex md:flex-row lg:gap-x-24 px-4 lg:px-0">
           <Image
             src={productQuery.data.item.image}
@@ -30,11 +31,11 @@ export default function ItemDetail() {
             className="max-h-[350px] w-auto md:w-2/5 md:h-auto lg:w-2/5 lg:max-h-[600px] mx-auto lg:mx-0"
           />
           <div className="flex-1 flex flex-col gap-y-6 lg:gap-y-14">
-            <div className="flex justify-between items-center relative">
-              <p className="lg:text-5xl text-2xl font-bold text-primary w-1/2 lg:w-3/5 text-wrap">
+            <div className="flex justify-between items-center relative gap-x-1">
+              <p className="lg:text-5xl text-2xl font-bold text-primary flex-1 text-wrap">
                 {productQuery.data.item.product_name}
               </p>
-              <div className="flex items-center gap-x-2">
+              <div className="flex items-center gap-x-2 w-fit">
                 {productQuery.data.item.saleoff && (
                   <SaleoffBadge
                     className="size-10 text-sm"
@@ -76,7 +77,7 @@ export default function ItemDetail() {
           </div>
         </section>
       ) : (
-        <>Loading...</>
+        <ItemSkeleton />
       )}
     </Layout>
   );
