@@ -1,6 +1,7 @@
 import { formatCurrency } from "@/lib/utils";
 import Image from "next/image";
 import ProductCardHover from "./Product-card-hover";
+import SaleoffBadge from "./SaleoffBadge";
 
 export type Categories = {
   id: number;
@@ -16,6 +17,7 @@ export type Product = {
   image: string;
   price: number;
   product_name: string;
+  saleoff: number | null;
 };
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -37,12 +39,29 @@ export default function ProductCard({ product }: { product: Product }) {
             {product.product_name}
           </p>
           <div className="flex items-center gap-x-2.5 lg:group-hover:invisible">
-            <p className="text-black text-sm lg:text-lg font-semibold">
-              {formatCurrency(product.price.toString())}
-            </p>
+            {product.saleoff && product.saleoff > 0 ? (
+              <p className="text-red-600 text-sm lg:text-lg font-semibold">
+                {formatCurrency(
+                  (
+                    product.price -
+                    (product.price * product.saleoff) / 100
+                  ).toString()
+                )}
+              </p>
+            ) : (
+              <p className="text-black text-sm lg:text-lg font-semibold">
+                {formatCurrency(product.price.toString())}
+              </p>
+            )}
           </div>
         </div>
       </div>
+      {product.saleoff !== null && product.saleoff > 0 && (
+        <SaleoffBadge
+          className="absolute top-1.5 right-1.5 size-10 text-sm"
+          saleoff={product.saleoff}
+        />
+      )}
     </div>
   );
 }
