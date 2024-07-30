@@ -54,7 +54,10 @@ export default function ProductPage() {
         {productsQuery.isSuccess &&
           products.map((product: Product) => {
             return (
-              <Link href={`/shop/item/${product.xata_id}`}>
+              <Link
+                key={product.xata_id}
+                href={`/shop/item/${product.xata_id}`}
+              >
                 <ProductCard key={product.product_name} product={product} />
               </Link>
             );
