@@ -7,7 +7,7 @@ import { trpc } from "@/server/utils/tRPC";
 import ProductCard from "@/components/Shop/Product-card";
 
 export default function ItemDetail() {
-  const [product, setProduct] = useState();
+  const [product, setProduct] = useState<any>();
   const router = useRouter();
 
   const productQuery = trpc.product.getProductById.useQuery({
@@ -21,7 +21,11 @@ export default function ItemDetail() {
     console.log(product);
   }, [productQuery]);
 
-  return <Layout>{product ? <ProductCard product={product} /> : <></>}</Layout>;
+  return (
+    <Layout>
+      {product ? <ProductCard key={product.id} product={product} /> : <></>}
+    </Layout>
+  );
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => ({
