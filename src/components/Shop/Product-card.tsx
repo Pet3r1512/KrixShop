@@ -13,31 +13,9 @@ export type Categories = {
 };
 
 export type Product = {
-  id: number;
-  xata_id: string;
-  category: string;
-  class: string;
-  clothes_size?: string | null;
-  color: string[];
-  description: string;
-  footwear_size?: number | null;
   image: string;
   price: number;
   product_name: string;
-  quantity: number;
-  rated: number;
-  reviews: number;
-  saleoff?: number | null;
-  type: string;
-  color_quantity: ProductColor[];
-};
-
-export type ProductColor = {
-  id: number;
-  productId: number;
-  color: string;
-  quantity: number;
-  product: Product;
 };
 
 export default function ProductCard({ product }: { product: Product }) {
