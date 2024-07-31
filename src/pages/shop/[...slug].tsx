@@ -1,12 +1,13 @@
 import Layout from "@/components/UI/Layout";
 import { trpc } from "@/server/utils/tRPC";
 import { GetServerSideProps } from "next";
-import { useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/UI/ui/skeleton";
 import { useRouter } from "next/router";
-import ProductCard, { Product } from "@/components/Shop/Product-card";
+import ProductCard from "@/components/Shop/Product-card";
 import EmptyProduct from "@/components/Shop/Empty-product";
+import Link from "next/link";
 
 export type Params = {
   category: string;
@@ -14,7 +15,6 @@ export type Params = {
 };
 
 export default function ProductPage() {
-  const [products, setProducts] = useState<any[]>([]);
   const [params, setParams] = useState<Params>({
     category: "",
     type: "",
@@ -27,12 +27,6 @@ export default function ProductPage() {
   });
 
   useEffect(() => {
-    if (productsQuery.isSuccess) {
-      setProducts(productsQuery.data?.products!);
-    }
-  }, [productsQuery]);
-
-  useEffect(() => {
     setParams({
       category: router.asPath.split("/")[2],
       type: router.asPath.split("/")[3],
@@ -41,7 +35,9 @@ export default function ProductPage() {
 
   return (
     <Layout pageName="Shop">
-      {productsQuery.isSuccess && products.length === 0 && <EmptyProduct />}
+      {productsQuery.isSuccess && productsQuery.data.products.length === 0 && (
+        <EmptyProduct />
+      )}
       <section className="grid md:grid-cols-3 lg:grid-cols-4 gap-y-3.5 grid-cols-2 justify-center lg:py-16 py-4">
         {productsQuery.isLoading && !productsQuery.isError && (
           <>
@@ -51,8 +47,15 @@ export default function ProductPage() {
           </>
         )}
         {productsQuery.isSuccess &&
-          products.map((product: Product) => {
-            return <ProductCard key={product.product_name} product={product} />;
+          productsQuery.data.products.map((product) => {
+            return (
+              <Link
+                key={product.xata_id}
+                href={`/shop/item/${product.xata_id}`}
+              >
+                <ProductCard key={product.product_name} product={product} />
+              </Link>
+            );
           })}
       </section>
     </Layout>

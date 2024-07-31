@@ -36,7 +36,7 @@ model Products {
   xata_updatedat DateTime       @default(now()) @db.Timestamptz(6)
   type           String
   clothes_size   String?
-  footwear_size  Int?
+  footwear_size  String?
   saleoff        Int?
   color_quantity ProductColor[]
 }

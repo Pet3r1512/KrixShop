@@ -55,6 +55,21 @@ export const productRouter = router({
         return { message: false, products: [] };
       }
     }),
+  getProductById: publicProcedure
+    .input(z.object({ xid: z.string() }))
+    .query(async ({ input }) => {
+      prisma.$connect();
+      const product = await prisma.products.findUnique({
+        where: {
+          xata_id: input.xid,
+        },
+      });
+      prisma.$disconnect();
+
+      if (product) {
+        return { message: true, item: product };
+      }
+    }),
 });
 
 export type AppRouter = typeof productRouter;

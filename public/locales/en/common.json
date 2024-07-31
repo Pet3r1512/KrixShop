@@ -7,5 +7,11 @@
     "hero": {
         "sale": "Sale Upto 40%",
         "button": "Shop Now"
+    },
+    "shop_page": {
+        "in_stock": "In Stock",
+        "out_stock": "Run Out",
+        "colors": "Colors",
+        "sizes": "Sizes"
     }
 }
