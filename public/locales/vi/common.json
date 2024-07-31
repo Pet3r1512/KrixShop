@@ -7,5 +7,11 @@
     "hero": {
         "sale": "Giảm giá lên đến 40%",
         "button": "Mua Ngay"
+    },
+    "shop_page": {
+        "in_stock": "Còn Hàng",
+        "out_stock": "Đã Hết",
+        "colors": "Màu Sắc",
+        "sizes": "Kích Cỡ"
     }
 }
