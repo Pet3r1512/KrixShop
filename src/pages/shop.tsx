@@ -93,7 +93,8 @@ export default function Shop() {
               ))}
         </section>
       ) : (
-        !loading && (
+        !loading &&
+        searchResult.length === 0 && (
           <p className="w-full text-lg lg:text-xl font-semibold px-4 lg:px-0">
             There is no product with{" "}
             <span className="text-primary">{search}</span> keyword!!!
