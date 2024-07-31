@@ -18,13 +18,18 @@ export type Product = {
   price: number;
   product_name: string;
   saleoff: number | null;
+  quantity: number;
 };
 
 export default function ProductCard({ product }: { product: Product }) {
   return (
     <div className="lg:w-64 w-40 md:w-56 py-2 lg:py-0 group relative transition-all duration-200 ease-linear shadow-2xl rounded-2xl mx-auto lg:mx-0">
-      <ProductCardHover />
-      <div className="h-full lg:group-hover:opacity-45 lg:p-2.5">
+      <ProductCardHover quantity={product.quantity} />
+      <div
+        className={`h-full lg:p-2.5 ${
+          product.quantity < 1 ? "opacity-45" : "lg:group-hover:opacity-45"
+        }`}
+      >
         <Image
           src={product.image}
           alt=""
@@ -58,6 +63,7 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
       {product.saleoff !== null && product.saleoff > 0 && (
         <SaleoffBadge
+          isOutStock={product.quantity < 1}
           className="absolute -top-1.5 -left-1.5 size-10 text-sm"
           saleoff={product.saleoff}
         />
