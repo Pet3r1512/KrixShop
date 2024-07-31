@@ -27,7 +27,7 @@ export default function Shop() {
   ) {
     return (
       <Layout pageName="Shop">
-        "Something goes wrong! Please come back later!!!"
+        Something goes wrong! Please come back later!!!
       </Layout>
     );
   }
