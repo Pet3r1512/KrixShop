@@ -103,6 +103,17 @@ export default function ItemDetail() {
                       </div>
                     );
                   })}
+                {productQuery.data.item.footwear_size &&
+                  productQuery.data.item.footwear_size
+                    .toString()
+                    .split(",")
+                    .map((size) => {
+                      return (
+                        <div className="flex items-center justify-center size-10 border-2 border-black rounded-lg font-semibold">
+                          {size}
+                        </div>
+                      );
+                    })}
               </div>
             </div>
           </div>
