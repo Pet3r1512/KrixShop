@@ -60,8 +60,17 @@ export default function ItemDetail() {
                     saleoff={product.saleoff}
                   />
                 )}
-                {product.quantity > 0 && <InStockBadge />}
-                {product.quantity <= 0 && <OutStockBadge />}
+                <button
+                  className={`px-2.5 py-1.5 rounded-xl font-semibold cursor-default ${
+                    product.quantity > 0
+                      ? "text-green-500 bg-green-100"
+                      : " bg-red-100 text-red-600 "
+                  }`}
+                >
+                  {product.quantity > 0
+                    ? t("shop_page.in_stock")
+                    : t("shop_page.out_stock")}
+                </button>
               </div>
             </div>
             <div className="flex items-center">
@@ -147,24 +156,6 @@ export default function ItemDetail() {
       </Layout>
     );
   }
-}
-
-function InStockBadge() {
-  const { t } = useTranslation("common");
-  return (
-    <button className="px-2.5 py-1.5 rounded-xl text-green-500 bg-green-100 font-semibold cursor-default">
-      {t("shop_page.in_stock")}
-    </button>
-  );
-}
-
-function OutStockBadge() {
-  const { t } = useTranslation("common");
-  return (
-    <button className="px-2.5 py-1.5 rounded-xl bg-red-100 text-red-600 font-semibold cursor-default">
-      {t("shop_page.out_stock")}
-    </button>
-  );
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => ({
