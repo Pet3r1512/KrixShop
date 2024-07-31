@@ -19,6 +19,8 @@ export type Product = {
   product_name: string;
   saleoff: number | null;
   quantity: number;
+  xata_id: string;
+  id: number;
 };
 
 export default function ProductCard({ product }: { product: Product }) {
