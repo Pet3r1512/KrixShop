@@ -6,7 +6,7 @@ import { trpc } from "@/server/utils/tRPC";
 import Image from "next/image";
 import { cn, formatCurrency } from "@/lib/utils";
 import SaleoffBadge from "@/components/Shop/SaleoffBadge";
-import ItemSkeleton from "@/components/Shop/Item/item-skeleton";
+import ItemSkeleton from "@/components/Shop/Skeleton/item-skeleton";
 import { useTranslation } from "next-i18next";
 
 export default function ItemDetail() {
