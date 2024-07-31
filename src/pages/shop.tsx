@@ -11,8 +11,15 @@ import { Input } from "@/components/UI/ui/input";
 export default function Shop() {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const productsQuery = trpc.product.getProducts.useQuery();
+
+  useEffect(() => {
+    if (productsQuery.data) {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (productsQuery.data) {
@@ -86,10 +93,12 @@ export default function Shop() {
               ))}
         </section>
       ) : (
-        <p className="w-full text-lg lg:text-xl font-semibold px-4 lg:px-0">
-          There is no product with{" "}
-          <span className="text-primary">{search}</span> keyword!!!
-        </p>
+        !loading && (
+          <p className="w-full text-lg lg:text-xl font-semibold px-4 lg:px-0">
+            There is no product with{" "}
+            <span className="text-primary">{search}</span> keyword!!!
+          </p>
+        )
       )}
     </Layout>
   );
