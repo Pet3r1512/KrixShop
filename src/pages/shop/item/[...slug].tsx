@@ -111,8 +111,9 @@ export default function ItemDetail() {
                       }}
                       key={color}
                       className={`size-10 rounded-lg ${
-                        color === "#fff" ||
-                        (color === "#FFF" && "border-2 border-black")
+                        color === "#fff" || color === "#FFF"
+                          ? "border-2 border-black"
+                          : ""
                       }`}
                     ></div>
                   );
