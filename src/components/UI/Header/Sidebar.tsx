@@ -53,7 +53,7 @@ export default function Sidebar() {
               >
                 <AccordionItem value={`item-${index + 1}`}>
                   <AccordionTrigger className="font-semibold">
-                    {nav.name}
+                    <Link href={"/shop"}>{nav.name}</Link>
                   </AccordionTrigger>
                   <AccordionContent className="pl-3">
                     <ShopAccordion />
