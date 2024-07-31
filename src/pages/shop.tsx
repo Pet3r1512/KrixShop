@@ -53,7 +53,7 @@ export default function Shop() {
 
   return (
     <Layout pageName="Shop">
-      <div className="flex items-center gap-x-2 lg:mt-8">
+      <div className="flex items-center gap-x-2 lg:mt-8 px-8 lg:px-0">
         <Input
           onChange={(e) => {
             setSearch(e.target.value);
@@ -67,7 +67,7 @@ export default function Shop() {
           className={`${
             search.length === 0 ||
             (searchResult.length > 0 && search.length > 0)
-              ? "grid md:grid-cols-3 lg:grid-cols-4 gap-y-3.5 grid-cols-2 justify-center lg:py-16 py-4"
+              ? "grid md:grid-cols-3 lg:grid-cols-4 gap-y-3.5 grid-cols-2 justify-center lg:py-16 py-4 px-4 lg:px-0"
               : ""
           }`}
         >
@@ -86,7 +86,7 @@ export default function Shop() {
               ))}
         </section>
       ) : (
-        <p className="w-full text-lg lg:text-xl font-semibold">
+        <p className="w-full text-lg lg:text-xl font-semibold px-4 lg:px-0">
           There is no product with{" "}
           <span className="text-primary">{search}</span> keyword!!!
         </p>
