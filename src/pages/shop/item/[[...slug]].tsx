@@ -8,13 +8,46 @@ import { cn, formatCurrency } from "@/lib/utils";
 import SaleoffBadge from "@/components/Shop/SaleoffBadge";
 import ItemSkeleton from "@/components/Shop/Skeleton/item-skeleton";
 import { useTranslation } from "next-i18next";
+import { Button } from "@/components/UI/ui/button";
+import { useEffect, useState } from "react";
+
+type ItemParams = {
+  color: string;
+  size: string;
+  // quantity: number;
+};
 
 export default function ItemDetail() {
+  const [itemParams, setItemParams] = useState<ItemParams>({
+    color: "",
+    size: "",
+    // quantity: 0,
+  });
   const router = useRouter();
   const { t } = useTranslation("common");
+  const params = new URLSearchParams();
+
+  const query = {
+    ...router.query,
+    color: itemParams?.color.replace("#", ""),
+    size: itemParams?.size,
+    // quantity: itemParams?.quantity,
+  };
+
+  useEffect(() => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: query,
+      },
+      undefined,
+      { scroll: false }
+    );
+  }, [itemParams]);
 
   const productQuery = trpc.product.getProductById.useQuery({
-    xid: router.asPath.split("/")[3].toString(),
+    // xid: "rec_cp9j9idqrj659ahfghog",
+    xid: router.asPath.split("/")[3].split("?")[0].toString(),
   });
 
   if (productQuery.isLoading) {
@@ -38,7 +71,7 @@ export default function ItemDetail() {
 
     return (
       <Layout pageName="Shop">
-        <section className="lg:my-16 my-8 md:flex md:flex-row lg:gap-x-24 px-4 lg:px-0">
+        <section className="lg:mt-16 my-8 md:flex md:flex-row lg:gap-x-24 px-4 lg:px-0">
           <Image
             src={product.image}
             alt=""
@@ -105,17 +138,29 @@ export default function ItemDetail() {
               <div className="flex items-center gap-x-3">
                 {product.color.map((color) => {
                   return (
-                    <div
+                    <Button
+                      onClick={() => {
+                        setItemParams((prev) => ({
+                          ...prev,
+                          color: color,
+                        }));
+                      }}
                       style={{
                         backgroundColor: color,
                       }}
                       key={color}
-                      className={`size-10 rounded-lg ${
+                      className={`w-10 h-10 rounded-lg ${
                         color === "#fff" || color === "#FFF"
                           ? "border-2 border-black"
                           : ""
                       }`}
-                    ></div>
+                    >
+                      {itemParams.color !== "" && itemParams.color === color ? (
+                        <span className="text-green-500 text-xl">&#10003;</span>
+                      ) : (
+                        <></>
+                      )}
+                    </Button>
                   );
                 })}
               </div>
@@ -128,12 +173,24 @@ export default function ItemDetail() {
                 {product.clothes_size &&
                   product.clothes_size.split(",").map((size) => {
                     return (
-                      <div
+                      <Button
+                        onClick={() => {
+                          setItemParams((prevParams) => ({
+                            ...prevParams,
+                            size: size,
+                          }));
+                        }}
                         key={size}
-                        className="flex items-center justify-center size-10 border-2 border-black rounded-lg font-semibold"
+                        className="flex items-center justify-center size-10 rounded-lg font-semibold bg-white border-2 border-primary text-primary lg:text-xl"
                       >
-                        {size}
-                      </div>
+                        {itemParams.size !== "" && itemParams.size === size ? (
+                          <span className="text-green-500 text-xl">
+                            &#10003;
+                          </span>
+                        ) : (
+                          size
+                        )}
+                      </Button>
                     );
                   })}
                 {product.footwear_size &&
@@ -144,7 +201,7 @@ export default function ItemDetail() {
                       return (
                         <div
                           key={size}
-                          className="flex items-center justify-center size-10 border-2 border-black rounded-lg font-semibold"
+                          className="flex items-center justify-center size-10 rounded-lg font-semibold"
                         >
                           {size}
                         </div>
@@ -152,6 +209,7 @@ export default function ItemDetail() {
                     })}
               </div>
             </div>
+            <Button className="w-fit lg:text-lg">Add To Cart</Button>
           </div>
         </section>
       </Layout>
