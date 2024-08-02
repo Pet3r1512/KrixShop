@@ -18,31 +18,33 @@ type ItemParams = {
 };
 
 export default function ItemDetail() {
-  const [itemParams, setItemParams] = useState<ItemParams>({
-    color: "",
-    size: "",
-    // quantity: 0,
-  });
   const router = useRouter();
   const { t } = useTranslation("common");
-  const params = new URLSearchParams();
+
+  const [itemParams, setItemParams] = useState<ItemParams>({
+    color: (router.query.color as string) || "",
+    size: (router.query.size as string) || "",
+    // quantity: 0,
+  });
 
   const query = {
     ...router.query,
-    color: itemParams?.color.replace("#", ""),
-    size: itemParams?.size,
+    color: itemParams.color ? itemParams.color : undefined,
+    size: itemParams.size ? itemParams.size : undefined,
     // quantity: itemParams?.quantity,
   };
 
   useEffect(() => {
-    router.push(
-      {
-        pathname: router.pathname,
-        query: query,
-      },
-      undefined,
-      { scroll: false }
-    );
+    if (itemParams.color || itemParams.size) {
+      router.push(
+        {
+          pathname: router.pathname,
+          query: query,
+        },
+        undefined,
+        { shallow: true, scroll: false }
+      );
+    }
   }, [itemParams]);
 
   const productQuery = trpc.product.getProductById.useQuery({
