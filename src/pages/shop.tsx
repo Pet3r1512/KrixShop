@@ -8,11 +8,15 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/UI/ui/input";
 import { Skeleton } from "@/components/UI/ui/skeleton";
+import { useDebounce } from "@/lib/hooks/hooks";
 
 export default function Shop() {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filtering, setFiltering] = useState(false);
+
+  const debouncedSearch = useDebounce(search, 750);
 
   const productsQuery = trpc.product.getProducts.useQuery();
 
@@ -23,18 +27,17 @@ export default function Shop() {
   }, []);
 
   useEffect(() => {
-    if (productsQuery.data) {
-      const delay = setTimeout(() => {
-        const filteredProducts = productsQuery.data.products.filter((product) =>
-          product.product_name.toLowerCase().includes(search.toLowerCase())
-        );
-        setSearchResult(filteredProducts);
-        console.log(search);
-      }, 750);
-
-      return () => clearTimeout(delay);
+    setFiltering(true);
+    if (productsQuery.data?.products) {
+      const filteredProducts = productsQuery.data.products.filter((product) =>
+        product.product_name
+          .toLowerCase()
+          .includes(debouncedSearch.toLowerCase())
+      );
+      setSearchResult(filteredProducts);
     }
-  }, [search, productsQuery.data]);
+    setFiltering(false);
+  }, [debouncedSearch, productsQuery.data]);
 
   if (productsQuery.isLoading) {
     return (
@@ -95,11 +98,12 @@ export default function Shop() {
               ))}
         </section>
       ) : (
-        !loading &&
-        searchResult.length === 0 && (
+        debouncedSearch !== "" &&
+        searchResult.length === 0 &&
+        !filtering && (
           <p className="w-full text-lg lg:text-xl font-semibold px-4 lg:px-0">
             There is no product with{" "}
-            <span className="text-primary">{search}</span> keyword!!!
+            <span className="text-primary">{debouncedSearch}</span> keyword!!!
           </p>
         )
       )}
