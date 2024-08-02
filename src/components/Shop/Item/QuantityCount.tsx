@@ -1,8 +1,12 @@
 import { Button } from "@/components/UI/ui/button";
-import { useState } from "react";
 
-export default function QuantityCount() {
-  const [quantity, setQuantity] = useState(1);
+export default function QuantityCount({
+  quantity,
+  setQuantity,
+}: {
+  quantity: number;
+  setQuantity: React.Dispatch<React.SetStateAction<number>>;
+}) {
   return (
     <div className="flex items-center gap-x-1">
       <Button
