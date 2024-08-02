@@ -12,22 +12,25 @@ import { Button } from "@/components/UI/ui/button";
 import { useEffect, useState } from "react";
 import QuantityCount from "@/components/Shop/Item/QuantityCount";
 import { ShoppingCart } from "lucide-react";
+import { useCart } from "@/lib/hooks/useCart";
+import { Toaster } from "@/components/UI/ui/toaster";
+import { toast } from "@/components/ui/ui/use-toast";
 
 type ItemParams = {
   color: string;
   size: string;
-  // quantity: number;
 };
 
 export default function ItemDetail() {
+  const [quantity, setQuantity] = useState(1);
   const router = useRouter();
-  const { t } = useTranslation("common");
-
   const [itemParams, setItemParams] = useState<ItemParams>({
     color: (router.query.color as string) || "",
     size: (router.query.size as string) || "",
-    // quantity: 0,
   });
+  const { t } = useTranslation("common");
+  const { items, addItem, removeItem, readItems } = useCart();
+  const currentItemId = router.asPath.split("/")[3].split("?")[0].toString();
 
   const query = {
     ...router.query,
@@ -35,7 +38,6 @@ export default function ItemDetail() {
     ...(itemParams.color && !itemParams.size
       ? { color: itemParams.color }
       : {}),
-    // quantity: itemParams?.quantity,
   };
 
   useEffect(() => {
@@ -52,9 +54,46 @@ export default function ItemDetail() {
   }, [itemParams]);
 
   const productQuery = trpc.product.getProductById.useQuery({
-    // xid: "rec_cp9j9idqrj659ahfghog",
-    xid: router.asPath.split("/")[3].split("?")[0].toString(),
+    xid: currentItemId,
   });
+
+  const handleAddToCart = () => {
+    // Validate selected
+    if (itemParams.color === "" || itemParams.size === "" || quantity < 1) {
+      return toast({
+        title: t("shop_page.toast.warning"),
+        duration: 1500,
+        className: "bg-[#fcbf49] text-white",
+      });
+    }
+    // Start adding to cart
+    addItem({
+      xata_id: currentItemId,
+      selectedColor: itemParams.color,
+      selectedSize: itemParams.size,
+      selectedQuantity: quantity,
+      price: productQuery.data?.item.price!,
+    });
+    setItemParams({
+      color: "",
+      size: "",
+    });
+    router.replace(
+      {
+        pathname: `/shop/item/${currentItemId}`,
+      },
+      undefined,
+      { shallow: true, scroll: false }
+    );
+    toast({
+      title: `${productQuery.data?.item.product_name} ${t(
+        "shop_page.toast.success"
+      )}`,
+      variant: "default",
+      duration: 1500,
+      className: "bg-green-500 text-white",
+    });
+  };
 
   if (productQuery.isLoading) {
     return (
@@ -220,14 +259,18 @@ export default function ItemDetail() {
                 {t("shop_page.quantity")}
               </p>
               <div className="flex items-center gap-x-6 justify-between !w-full">
-                <QuantityCount />
-                <Button className="w-fit lg:text-lg flex items-center gap-x-1 pt-2 pb-1.5">
+                <QuantityCount quantity={quantity} setQuantity={setQuantity} />
+                <Button
+                  onClick={handleAddToCart}
+                  className="w-fit lg:text-lg flex items-center gap-x-1 pt-2 pb-1.5"
+                >
                   {t("shop_page.add_to_cart")} <ShoppingCart />
                 </Button>
               </div>
             </div>
           </div>
         </section>
+        <Toaster />
       </Layout>
     );
   }
