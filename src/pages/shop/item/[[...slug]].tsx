@@ -10,6 +10,8 @@ import ItemSkeleton from "@/components/Shop/Skeleton/item-skeleton";
 import { useTranslation } from "next-i18next";
 import { Button } from "@/components/UI/ui/button";
 import { useEffect, useState } from "react";
+import QuantityCount from "@/components/Shop/Item/QuantityCount";
+import { ShoppingCart } from "lucide-react";
 
 type ItemParams = {
   color: string;
@@ -213,7 +215,12 @@ export default function ItemDetail() {
                     })}
               </div>
             </div>
-            <Button className="w-fit lg:text-lg">Add To Cart</Button>
+            <div className="flex items-center gap-x-6 justify-between !w-full">
+              <QuantityCount />
+              <Button className="w-fit lg:text-lg flex items-center gap-x-1 pt-2 pb-1.5">
+                Add To Cart <ShoppingCart />
+              </Button>
+            </div>
           </div>
         </section>
       </Layout>
