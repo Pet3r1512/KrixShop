@@ -89,7 +89,6 @@ export default function ItemDetail() {
       title: `${productQuery.data?.item.product_name} ${t(
         "shop_page.toast.success"
       )}`,
-      variant: "default",
       duration: 1500,
       className: "bg-green-500 text-white",
     });
