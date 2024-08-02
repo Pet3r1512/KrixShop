@@ -29,8 +29,10 @@ export default function ItemDetail() {
 
   const query = {
     ...router.query,
-    color: itemParams.color ? itemParams.color : undefined,
-    size: itemParams.size ? itemParams.size : undefined,
+    ...(itemParams.size ? { size: itemParams.size } : {}),
+    ...(itemParams.color && !itemParams.size
+      ? { color: itemParams.color }
+      : {}),
     // quantity: itemParams?.quantity,
   };
 
