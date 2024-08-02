@@ -38,7 +38,7 @@ export default function ItemDetail() {
 
   useEffect(() => {
     if (itemParams.color || itemParams.size) {
-      router.push(
+      router.replace(
         {
           pathname: router.pathname,
           query: query,
