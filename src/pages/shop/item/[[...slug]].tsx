@@ -215,11 +215,16 @@ export default function ItemDetail() {
                     })}
               </div>
             </div>
-            <div className="flex items-center gap-x-6 justify-between !w-full">
-              <QuantityCount />
-              <Button className="w-fit lg:text-lg flex items-center gap-x-1 pt-2 pb-1.5">
-                Add To Cart <ShoppingCart />
-              </Button>
+            <div className="flex flex-col gap-y-2">
+              <p className="text-lg lg:text-xl font-semibold">
+                {t("shop_page.quantity")}
+              </p>
+              <div className="flex items-center gap-x-6 justify-between !w-full">
+                <QuantityCount />
+                <Button className="w-fit lg:text-lg flex items-center gap-x-1 pt-2 pb-1.5">
+                  {t("shop_page.add_to_cart")} <ShoppingCart />
+                </Button>
+              </div>
             </div>
           </div>
         </section>
