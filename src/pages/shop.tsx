@@ -42,11 +42,13 @@ export default function Shop() {
   if (productsQuery.isLoading) {
     return (
       <Layout pageName="Shop">
-        <Skeleton className="lg:w-1/2 h-[35px] w-full lg:mt-8 px-8 lg:px-0" />
-        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-y-3.5 grid-cols-2 justify-center lg:py-16 py-4">
-          {[...Array(4)].map((_, index) => (
-            <CardSkeleton key={index} />
-          ))}
+        <div className="px-4 lg:px-0">
+          <Skeleton className="lg:w-1/2 h-[35px] w- lg:mt-8" />
+          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-y-3.5 grid-cols-2 justify-center lg:py-16 py-4">
+            {[...Array(4)].map((_, index) => (
+              <CardSkeleton key={index} />
+            ))}
+          </div>
         </div>
       </Layout>
     );
@@ -65,7 +67,7 @@ export default function Shop() {
 
   return (
     <Layout pageName="Shop">
-      <div className="flex items-center gap-x-2 lg:mt-8 px-8 lg:px-0">
+      <div className="flex items-center gap-x-2 lg:mt-8 px-4 lg:px-0">
         <Input
           onChange={(e) => {
             setSearch(e.target.value);
