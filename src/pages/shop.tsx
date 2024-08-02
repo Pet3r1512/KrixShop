@@ -7,6 +7,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/UI/ui/input";
+import { Skeleton } from "@/components/UI/ui/skeleton";
 
 export default function Shop() {
   const [search, setSearch] = useState("");
@@ -38,6 +39,7 @@ export default function Shop() {
   if (productsQuery.isLoading) {
     return (
       <Layout pageName="Shop">
+        <Skeleton className="lg:w-1/2 h-[35px] w-full lg:mt-8 px-8 lg:px-0" />
         <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-y-3.5 grid-cols-2 justify-center lg:py-16 py-4">
           {[...Array(4)].map((_, index) => (
             <CardSkeleton key={index} />
