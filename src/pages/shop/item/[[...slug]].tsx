@@ -14,7 +14,7 @@ import QuantityCount from "@/components/Shop/Item/QuantityCount";
 import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/lib/hooks/useCart";
 import { Toaster } from "@/components/UI/ui/toaster";
-import { toast } from "@/components/ui/ui/use-toast";
+import { toast } from "@/components/UI/ui/use-toast";
 
 type ItemParams = {
   color: string;
