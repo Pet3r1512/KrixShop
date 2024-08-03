@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 import QuantityCount from "@/components/Shop/Item/QuantityCount";
 import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/lib/hooks/useCart";
-import { Toaster } from "@/components/UI/ui/toaster";
 import { toast } from "@/components/UI/ui/use-toast";
 
 type ItemParams = {
@@ -63,7 +62,8 @@ export default function ItemDetail() {
       return toast({
         title: t("shop_page.toast.warning"),
         duration: 1500,
-        className: "bg-[#fcbf49] text-white",
+        className:
+          "bg-[#fcbf49] text-white fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-2 sm:right-2 sm:top-auto sm:flex-col md:max-w-[420px] rounded-xl",
       });
     }
     // Start adding to cart
@@ -90,7 +90,8 @@ export default function ItemDetail() {
         "shop_page.toast.success"
       )}`,
       duration: 1500,
-      className: "bg-green-500 text-white",
+      className:
+        "bg-green-500 text-white fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-2 sm:right-2 sm:top-auto sm:flex-col md:max-w-[420px] rounded-xl",
     });
   };
 
@@ -269,7 +270,6 @@ export default function ItemDetail() {
             </div>
           </div>
         </section>
-        <Toaster />
       </Layout>
     );
   }
