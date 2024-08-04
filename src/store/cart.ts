@@ -3,6 +3,7 @@ import create from "zustand";
 // Define the Item type
 export type Item = {
   xata_id: string;
+  name: string;
   selectedColor: string;
   selectedSize: string;
   selectedQuantity: number;
@@ -23,6 +24,7 @@ export type CartActions = {
     selectedSize: string
   ) => void;
   readItems: () => Item[];
+  count: () => number;
 };
 
 // Combine CartState and CartActions to form the CartStore type
@@ -67,4 +69,11 @@ export const useCartStore = create<CartStore>((set, get) => ({
         .filter((item) => item.selectedQuantity > 0),
     })),
   readItems: () => get().items,
+  count: () => {
+    let count = 0;
+    get().items.map((item) => {
+      count += item.selectedQuantity;
+    });
+    return count;
+  },
 }));
