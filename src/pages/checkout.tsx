@@ -1,4 +1,3 @@
-import CartItem from "@/components/Cart/CartItem";
 import ItemsTable from "@/components/Cart/ItemsTable";
 import Layout from "@/components/UI/Layout";
 import { GetServerSideProps } from "next";
