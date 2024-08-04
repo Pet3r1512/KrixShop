@@ -5,11 +5,13 @@ export const useCart = () => {
   const addItem = useCartStore((state) => state.addItem);
   const removeItem = useCartStore((state) => state.removeItem);
   const readItems = useCartStore((state) => state.readItems);
+  const count = useCartStore((state) => state.count);
 
   return {
     items,
     addItem,
     removeItem,
     readItems,
+    count,
   };
 };
