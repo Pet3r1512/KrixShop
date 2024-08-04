@@ -9,7 +9,6 @@ import {
 } from "../ui/accordion";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
-import { useState } from "react";
 
 export default function Sidebar() {
   const { t } = useTranslation("common");
