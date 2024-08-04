@@ -22,14 +22,14 @@ export default function ItemsTable() {
       <TableHeader>
         {/* Desktop's table head */}
         <TableRow className="text-xl font-semibold hidden lg:table-row">
-          <TableHead className="">Product's Name</TableHead>
+          <TableHead className="">{"Product's Name"}</TableHead>
           <TableHead className="w-[100px] text-center">Price</TableHead>
           <TableHead className="w-[150px] text-center">Quantity</TableHead>
           <TableHead className="text-right w-[100px]">Subtotal</TableHead>
         </TableRow>
         {/* Mobile's table head */}
         <TableRow className="text-xl font-semibold lg:hidden">
-          <TableHead className="">Product's Detail</TableHead>
+          <TableHead className="">{"Product's Detail"}</TableHead>
           <TableHead className="text-right w-[50px]">Subtotal</TableHead>
         </TableRow>
       </TableHeader>
@@ -37,7 +37,7 @@ export default function ItemsTable() {
       <TableBody className="hidden lg:table-row-group">
         {readItems().map((item: Item) => {
           return (
-            <TableRow className="text-[16px]">
+            <TableRow key={item.xata_id} className="text-[16px]">
               <TableCell className="font-medium truncate">
                 {item.name}
               </TableCell>
@@ -61,7 +61,7 @@ export default function ItemsTable() {
       <TableBody className="lg:hidden">
         {readItems().map((item: Item) => {
           return (
-            <TableRow className="text-[16px]">
+            <TableRow key={item.xata_id} className="text-[16px]">
               <TableCell className="flex flex-col gap-y-1.5">
                 <p className="font-semibold text-base sm:text-lg">
                   {item.name}
