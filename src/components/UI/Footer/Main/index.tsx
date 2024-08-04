@@ -1,5 +1,6 @@
 import { Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
+import LangChange from "../../Header/Lang-change";
 
 export default function FooterMain() {
   const infos = [
@@ -43,6 +44,7 @@ export default function FooterMain() {
             );
           })}
         </div>
+        <LangChange />
       </div>
     </div>
   );
