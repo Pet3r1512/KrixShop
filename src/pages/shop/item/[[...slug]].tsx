@@ -28,7 +28,7 @@ export default function ItemDetail() {
     size: (router.query.size as string) || "",
   });
   const { t } = useTranslation("common");
-  const { items, addItem, removeItem, readItems } = useCart();
+  const { addItem } = useCart();
   const currentItemId = router.asPath.split("/")[3].split("?")[0].toString();
 
   const query = {
@@ -69,6 +69,7 @@ export default function ItemDetail() {
     // Start adding to cart
     addItem({
       xata_id: currentItemId,
+      name: productQuery.data?.item.product_name!,
       selectedColor: itemParams.color,
       selectedSize: itemParams.size,
       selectedQuantity: quantity,
