@@ -9,13 +9,24 @@ import {
 } from "../UI/ui/table";
 import { formatCurrency } from "@/lib/utils";
 import { useCart } from "@/lib/hooks/useCart";
+import { useEffect } from "react";
 
-export default function ItemsTable() {
+export default function ItemsTable({
+  subtotal,
+  setSubtotal,
+}: {
+  subtotal: number;
+  setSubtotal: React.Dispatch<React.SetStateAction<number>>;
+}) {
   const { readItems } = useCart();
 
-  if (readItems().length === 0) {
-    return <p>No Products!</p>;
-  }
+  useEffect(() => {
+    let total = readItems().reduce(
+      (acc, item) => acc + item.price * item.selectedQuantity,
+      0
+    );
+    setSubtotal(total);
+  }, []);
 
   return (
     <Table>
@@ -60,6 +71,7 @@ export default function ItemsTable() {
       {/* Mobile's table */}
       <TableBody className="lg:hidden">
         {readItems().map((item: Item) => {
+          const price = item.price * item.selectedQuantity;
           return (
             <TableRow key={item.xata_id} className="text-[16px]">
               <TableCell className="flex flex-col gap-y-1.5">
@@ -72,12 +84,7 @@ export default function ItemsTable() {
                 <p className="text-sm">Quantity: {item.selectedQuantity}</p>
               </TableCell>
               <TableCell className="text-right">
-                <p>
-                  {formatCurrency(
-                    (item.price * item.selectedQuantity).toString(),
-                    false
-                  )}
-                </p>
+                <p>{formatCurrency(price.toString(), false)}</p>
               </TableCell>
             </TableRow>
           );
