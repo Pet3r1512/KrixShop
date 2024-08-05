@@ -1,20 +1,31 @@
 import ItemsTable from "@/components/Cart/ItemsTable";
+import MoneyCheck from "@/components/Cart/MoneyCheck";
 import Layout from "@/components/UI/Layout";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useState } from "react";
+import { useCart } from "@/lib/hooks/useCart";
 
 export default function Checkout() {
+  const [subtotal, setSubtotal] = useState(0);
+
+  const { readItems } = useCart();
+
   return (
     <Layout pageName="Checkout">
-      <main className="lg:my-8 my-4 min-h-screen lg:min-h-0 px-4 lg:px-0">
-        <p className="text-2xl lg:text-4xl font-semibold">Checkout</p>
-        <section className="flex flex-col lg:flex-row lg:items-center gap-x-2.5 mt-6">
-          {/* Cart items */}
-          <ItemsTable />
-          {/* Money check */}
-          <div className="lg:w-[35%]"></div>
-        </section>
-      </main>
+      {readItems().length === 0 ? (
+        <p className="px-4 lg:px-0">Empty cart!</p>
+      ) : (
+        <main className="lg:my-8 my-4 min-h-screen lg:min-h-0 px-4 lg:px-0">
+          <p className="text-2xl lg:text-4xl font-semibold">Checkout</p>
+          <section className="flex flex-col lg:flex-row lg:items-center gap-x-10 mt-6">
+            <ItemsTable subtotal={subtotal} setSubtotal={setSubtotal} />
+            <div className="w-full lg:w-[25%] self-start mt-24 lg:mt-0">
+              <MoneyCheck total={subtotal} />
+            </div>
+          </section>
+        </main>
+      )}
     </Layout>
   );
 }
