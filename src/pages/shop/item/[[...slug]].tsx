@@ -57,6 +57,7 @@ export default function ItemDetail() {
   });
 
   const handleAddToCart = () => {
+    const data = productQuery.data?.item!;
     // Validate selected
     if (itemParams.color === "" || itemParams.size === "" || quantity < 1) {
       return toast({
@@ -69,11 +70,13 @@ export default function ItemDetail() {
     // Start adding to cart
     addItem({
       xata_id: currentItemId,
-      name: productQuery.data?.item.product_name!,
+      name: data.product_name!,
       selectedColor: itemParams.color,
       selectedSize: itemParams.size,
       selectedQuantity: quantity,
-      price: productQuery.data?.item.price!,
+      price: data.saleoff
+        ? data.price! - (data.saleoff * data.price) / 100
+        : data.price,
     });
     setItemParams({
       color: "",
