@@ -81,7 +81,7 @@ export default function ItemsTable({
                 <p className="text-[16px]">
                   Price: {formatCurrency(item.price.toString(), false)}
                 </p>
-                <p className="text-sm">Quantity: {item.selectedQuantity}</p>
+                <p className="text-sm">{"x" + item.selectedQuantity}</p>
               </TableCell>
               <TableCell className="text-right">
                 <p>{formatCurrency(price.toString(), false)}</p>
