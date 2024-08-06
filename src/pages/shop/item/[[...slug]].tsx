@@ -6,16 +6,98 @@ import { trpc } from "@/server/utils/tRPC";
 import Image from "next/image";
 import { cn, formatCurrency } from "@/lib/utils";
 import SaleoffBadge from "@/components/Shop/SaleoffBadge";
-import ItemSkeleton from "@/components/Shop/Item/item-skeleton";
+import ItemSkeleton from "@/components/Shop/Skeleton/item-skeleton";
 import { useTranslation } from "next-i18next";
+import { Button } from "@/components/UI/ui/button";
+import { useEffect, useState } from "react";
+import QuantityCount from "@/components/Shop/Item/QuantityCount";
+import { ShoppingCart } from "lucide-react";
+import { useCart } from "@/lib/hooks/useCart";
+import { toast } from "@/components/UI/ui/use-toast";
+
+type ItemParams = {
+  color: string;
+  size: string;
+};
 
 export default function ItemDetail() {
+  const [quantity, setQuantity] = useState(1);
   const router = useRouter();
+  const [itemParams, setItemParams] = useState<ItemParams>({
+    color: (router.query.color as string) || "",
+    size: (router.query.size as string) || "",
+  });
   const { t } = useTranslation("common");
+  const { addItem } = useCart();
+  const currentItemId = router.asPath.split("/")[3].split("?")[0].toString();
+
+  const query = {
+    ...router.query,
+    ...(itemParams.size ? { size: itemParams.size } : {}),
+    ...(itemParams.color && !itemParams.size
+      ? { color: itemParams.color }
+      : {}),
+  };
+
+  useEffect(() => {
+    if (itemParams.color || itemParams.size) {
+      router.replace(
+        {
+          pathname: router.pathname,
+          query: query,
+        },
+        undefined,
+        { shallow: true, scroll: false }
+      );
+    }
+  }, [itemParams]);
 
   const productQuery = trpc.product.getProductById.useQuery({
-    xid: router.asPath.split("/")[3].toString(),
+    xid: currentItemId,
   });
+
+  const handleAddToCart = () => {
+    const data = productQuery.data?.item!;
+    // Validate selected
+    if (itemParams.color === "" || itemParams.size === "" || quantity < 1) {
+      return toast({
+        title: t("shop_page.toast.warning"),
+        duration: 1500,
+        className:
+          "bg-[#fcbf49] text-white fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-2 sm:right-2 sm:top-auto sm:flex-col md:max-w-[420px] rounded-xl",
+      });
+    }
+    // Start adding to cart
+    addItem({
+      xata_id: currentItemId,
+      name: data.product_name!,
+      selectedColor: itemParams.color,
+      selectedSize: itemParams.size,
+      selectedQuantity: quantity,
+      price: data.saleoff
+        ? data.price! - (data.saleoff * data.price) / 100
+        : data.price,
+    });
+    setItemParams({
+      color: "",
+      size: "",
+    });
+    router.replace(
+      {
+        pathname: `/shop/item/${currentItemId}`,
+      },
+      undefined,
+      { shallow: true, scroll: false }
+    );
+    toast({
+      title: `${productQuery.data?.item.product_name} ${t(
+        "shop_page.toast.success"
+      )}`,
+      duration: 1500,
+      className:
+        "bg-green-500 text-white fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-2 sm:right-2 sm:top-auto sm:flex-col md:max-w-[420px] rounded-xl",
+    });
+  };
 
   if (productQuery.isLoading) {
     return (
@@ -38,7 +120,7 @@ export default function ItemDetail() {
 
     return (
       <Layout pageName="Shop">
-        <section className="lg:my-16 my-8 md:flex md:flex-row lg:gap-x-24 px-4 lg:px-0">
+        <section className="lg:mt-16 my-8 md:flex md:flex-row lg:gap-x-24 px-4 lg:px-0">
           <Image
             src={product.image}
             alt=""
@@ -105,16 +187,29 @@ export default function ItemDetail() {
               <div className="flex items-center gap-x-3">
                 {product.color.map((color) => {
                   return (
-                    <div
+                    <Button
+                      onClick={() => {
+                        setItemParams((prev) => ({
+                          ...prev,
+                          color: color,
+                        }));
+                      }}
                       style={{
                         backgroundColor: color,
                       }}
                       key={color}
-                      className={`size-10 rounded-lg ${
-                        color === "#fff" ||
-                        (color === "#FFF" && "border-2 border-black")
+                      className={`w-10 h-10 rounded-lg ${
+                        color === "#fff" || color === "#FFF"
+                          ? "border-2 border-black"
+                          : ""
                       }`}
-                    ></div>
+                    >
+                      {itemParams.color !== "" && itemParams.color === color ? (
+                        <span className="text-green-500 text-xl">&#10003;</span>
+                      ) : (
+                        <></>
+                      )}
+                    </Button>
                   );
                 })}
               </div>
@@ -127,12 +222,24 @@ export default function ItemDetail() {
                 {product.clothes_size &&
                   product.clothes_size.split(",").map((size) => {
                     return (
-                      <div
+                      <Button
+                        onClick={() => {
+                          setItemParams((prevParams) => ({
+                            ...prevParams,
+                            size: size,
+                          }));
+                        }}
                         key={size}
-                        className="flex items-center justify-center size-10 border-2 border-black rounded-lg font-semibold"
+                        className="flex items-center justify-center size-10 rounded-lg font-semibold bg-white border-2 border-primary text-primary lg:text-xl"
                       >
-                        {size}
-                      </div>
+                        {itemParams.size !== "" && itemParams.size === size ? (
+                          <span className="text-green-500 text-xl">
+                            &#10003;
+                          </span>
+                        ) : (
+                          size
+                        )}
+                      </Button>
                     );
                   })}
                 {product.footwear_size &&
@@ -143,12 +250,26 @@ export default function ItemDetail() {
                       return (
                         <div
                           key={size}
-                          className="flex items-center justify-center size-10 border-2 border-black rounded-lg font-semibold"
+                          className="flex items-center justify-center size-10 rounded-lg font-semibold"
                         >
                           {size}
                         </div>
                       );
                     })}
+              </div>
+            </div>
+            <div className="flex flex-col gap-y-2">
+              <p className="text-lg lg:text-xl font-semibold">
+                {t("shop_page.quantity")}
+              </p>
+              <div className="flex items-center gap-x-6 justify-between !w-full">
+                <QuantityCount quantity={quantity} setQuantity={setQuantity} />
+                <Button
+                  onClick={handleAddToCart}
+                  className="w-fit lg:text-lg flex items-center gap-x-1 pt-2 pb-1.5"
+                >
+                  {t("shop_page.add_to_cart")} <ShoppingCart />
+                </Button>
               </div>
             </div>
           </div>

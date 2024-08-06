@@ -3,11 +3,11 @@ import { trpc } from "@/server/utils/tRPC";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useEffect, useState } from "react";
-import { Skeleton } from "@/components/UI/ui/skeleton";
 import { useRouter } from "next/router";
 import ProductCard from "@/components/Shop/Product-card";
 import EmptyProduct from "@/components/Shop/Empty-product";
 import Link from "next/link";
+import CardSkeleton from "@/components/Shop/Skeleton/card-skeleton";
 
 export type Params = {
   category: string;
@@ -39,13 +39,11 @@ export default function ProductPage() {
         <EmptyProduct />
       )}
       <section className="grid md:grid-cols-3 lg:grid-cols-4 gap-y-3.5 grid-cols-2 justify-center lg:py-16 py-4">
-        {productsQuery.isLoading && !productsQuery.isError && (
-          <>
-            <Skeleton className="lg:w-64 w-40 md:w-56 lg:h-[392.75px] h-[275.84px] md:h-[349.97px] mx-auto lg:mx-0" />
-            <Skeleton className="lg:w-64 w-40 md:w-56 lg:h-[392.75px] h-[275.84px] md:h-[349.97px] mx-auto lg:mx-0" />
-            <Skeleton className="lg:w-64 w-40 md:w-56 lg:h-[392.75px] h-[275.84px] md:h-[349.97px] mx-auto lg:mx-0" />
-          </>
-        )}
+        {productsQuery.isLoading &&
+          !productsQuery.isError &&
+          [...Array(4)].map((each) => {
+            return <CardSkeleton key={each} />;
+          })}
         {productsQuery.isSuccess &&
           productsQuery.data.products.map((product) => {
             return (
