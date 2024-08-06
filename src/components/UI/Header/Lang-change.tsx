@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import { ChevronDown } from "lucide-react";
+import { useRouter } from "next/router";
+import { useCookies } from "react-cookie";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import Image from "next/image";
-import { ChevronDown } from "lucide-react";
-import { useRouter } from "next/router";
-import { useCookies } from "react-cookie";
+} from "@radix-ui/react-dropdown-menu";
 
 type currentLang = {
   lang: string;
@@ -61,8 +61,8 @@ export default function LangChange() {
           setOpen(!open);
         }}
       >
-        <div className="flex items-center gap-x-2 lg:text-base text-sm font-semibold justify-between w-[60px] md:w-[150px] lg:py-2 lg:px-2.5 py-1.5 px-2 shadow-xl rounded-xl">
-          <p className="hidden md:block">{currentLang.lang} </p>
+        <div className="ml-auto lg:ml-0 bg-white text-black flex items-center gap-x-2 lg:text-base text-sm font-semibold justify-between w-[150px] lg:py-2 lg:px-2.5 py-1.5 px-2 shadow-xl rounded-xl">
+          <p>{currentLang.lang} </p>
           <div className="flex items-center">
             <Image
               src={`/images/lang/${currentLang.img}`}
@@ -75,7 +75,7 @@ export default function LangChange() {
           </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="flex flex-col gap-y-3.5">
+      <DropdownMenuContent className="flex flex-col gap-y-3.5 absolute w-max lg:-left-32 -right-44 left-auto">
         {langs.map((lang) => {
           return (
             <DropdownMenuItem

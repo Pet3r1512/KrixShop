@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/UI/ui/input";
 import { Skeleton } from "@/components/UI/ui/skeleton";
-import { useDebounce } from "@/lib/hooks/hooks";
+import { useDebounce } from "@/lib/hooks/useDebounce";
 
 export default function Shop() {
   const [search, setSearch] = useState("");

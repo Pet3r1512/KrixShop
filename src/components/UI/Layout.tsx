@@ -7,6 +7,7 @@ React.useLayoutEffect = React.useEffect;
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
 import Footer from "./Footer";
+import { Toaster } from "./ui/toaster";
 
 export default function Layout({
   children,
@@ -36,11 +37,12 @@ export default function Layout({
         <title>{fullPageName}</title>
       </Head>
       <main className={cn("lg:pt-6 pt-5 scrollbar-hide", mainClassName)}>
-        <div className="flex flex-col gap-y-5 max-w-7xl mx-auto lg:min-h-screen">
+        <div className="flex flex-col gap-y-5 max-w-7xl mx-auto min-h-screen">
           <Header />
           {children}
         </div>
         <Footer />
+        <Toaster />
       </main>
     </>
   );

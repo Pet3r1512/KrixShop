@@ -12,6 +12,12 @@
         "in_stock": "In Stock",
         "out_stock": "Run Out",
         "colors": "Colors",
-        "sizes": "Sizes"
+        "sizes": "Sizes",
+        "quantity": "Quantity",
+        "add_to_cart": "Add To Cart",
+        "toast": {
+            "warning": "Please select color and size",
+            "success": "added successfully"
+        }
     }
 }

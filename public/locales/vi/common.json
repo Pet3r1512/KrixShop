@@ -12,6 +12,12 @@
         "in_stock": "Còn Hàng",
         "out_stock": "Đã Hết",
         "colors": "Màu Sắc",
-        "sizes": "Kích Cỡ"
+        "sizes": "Kích Cỡ",
+        "quantity": "Số Lượng",
+        "add_to_cart": "Thêm Vào Giỏ Hàng",
+        "toast": {
+            "warning": "Vui lòng chọn màu và kích cỡ",
+            "success": "đã được thêm thành công"
+        }
     }
 }

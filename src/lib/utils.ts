@@ -5,7 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatCurrency(money: string): string {
+export function formatCurrency(
+  money: string,
+  includeCurrencySymbol: boolean = true
+): string {
   // Parse the money string to a number
   const amount = parseFloat(money);
 
@@ -15,8 +18,15 @@ export function formatCurrency(money: string): string {
   }
 
   // Format the number as currency
-  return (Math.floor(amount / 1000) * 1000).toLocaleString("it-IT", {
-    style: "currency",
-    currency: "VND",
-  });
+  const formattedAmount = (Math.floor(amount / 1000) * 1000).toLocaleString(
+    "it-IT",
+    {
+      style: includeCurrencySymbol ? "currency" : "decimal",
+      currency: "VND",
+    }
+  );
+
+  return includeCurrencySymbol
+    ? formattedAmount
+    : formattedAmount.replace("₫", "");
 }

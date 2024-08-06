@@ -1,7 +1,7 @@
 import Logo from "../Logo";
 import NavBar from "@/components/Home/NavBar";
-import LangChange from "./Lang-change";
 import Sidebar from "./Sidebar";
+import CartButton from "@/components/Shop/Cart-button";
 
 export default function Header() {
   return (
@@ -9,7 +9,7 @@ export default function Header() {
       <Sidebar />
       <Logo />
       <NavBar />
-      <LangChange />
+      <CartButton />
     </section>
   );
 }
