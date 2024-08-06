@@ -87,6 +87,7 @@ export default function Shop() {
         >
           {searchResult.length === 0 &&
           search.length === 0 &&
+          !loading &&
           productsQuery.data
             ? productsQuery.data.products.map((product) => (
                 <Link key={product.id} href={`shop/item/${product.xata_id}`}>
