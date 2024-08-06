@@ -61,7 +61,7 @@ export default function LangChange() {
           setOpen(!open);
         }}
       >
-        <div className="ml-auto lg:ml-0 bg-white text-black flex items-center gap-x-2 lg:text-base text-sm font-semibold justify-between w-[150px] lg:py-2 lg:px-2.5 py-1.5 px-2 shadow-xl rounded-xl">
+        <div className="ml-auto bg-white text-black flex items-center gap-x-2 lg:text-base text-sm font-semibold justify-between w-[150px] lg:py-2 lg:px-2.5 py-1.5 px-2 shadow-xl rounded-xl">
           <p>{currentLang.lang} </p>
           <div className="flex items-center">
             <Image
@@ -75,7 +75,7 @@ export default function LangChange() {
           </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="flex flex-col gap-y-3.5 absolute w-max lg:-left-32 -right-44 left-auto">
+      <DropdownMenuContent className="bg-white text-black rounded-lg p-2 mt-2.5 sm:-mt-8 lg:mt-2 flex flex-col gap-y-3.5 relative -right-full sm:right-0 lg:-right-full">
         {langs.map((lang) => {
           return (
             <DropdownMenuItem
