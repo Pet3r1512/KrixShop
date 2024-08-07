@@ -8,6 +8,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum PaymentMethod {
+  CASH
+  TRANSFER
+  MOMO
+  COD
+}
+
+enum OrderStatus {
+  CONFIRMED
+  ONSHIP
+  COMPLETED
+  ERROR
+}
+
+enum CustomerRank {
+  MEMBER
+  GOLD
+  PLATINUM
+  DIAMOND
+}
+
 model Categories {
   id             Int      @id @default(autoincrement())
   name           String   @unique
@@ -39,6 +60,8 @@ model Products {
   footwear_size  String?
   saleoff        Int?
   color_quantity ProductColor[]
+
+  orderDetails OrderDetails[] @relation("ProductToOrderDetails")
 }
 
 model ProductColor {
@@ -53,4 +76,48 @@ model ProductColor {
   product        Products @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@unique([productId, color])
+}
+
+model Vocher {
+  id          String   @id
+  voucherCode String
+  validAt     DateTime
+  expiredAt   DateTime
+  quantiy     Int
+  discount    Int
+}
+
+model Customer {
+  id     String       @id
+  name   String
+  rank   CustomerRank
+  point  Int
+  orders Orders[]     @relation("CustomerToOrder")
+}
+
+model Orders {
+  orderId       String         @id
+  customerId    String
+  total         Int
+  items         Int
+  orderDate     DateTime
+  address       String
+  shipDate      DateTime
+  shipCost      Int
+  voucher       String?
+  paymentMethod PaymentMethod
+  status        OrderStatus
+  orderDetails  OrderDetails[] @relation("OrderToOrderDetails")
+  customer      Customer       @relation(fields: [customerId], references: [id], name: "CustomerToOrder")
+}
+
+model OrderDetails {
+  orderDetailId String   @id
+  orderId       String
+  unitId        String
+  quantity      Int
+  unitPrice     Int
+  totalPrice    Int
+  order         Orders   @relation(fields: [orderId], references: [orderId], name: "OrderToOrderDetails")
+  product       Products @relation(fields: [unitId], references: [xata_id], name: "ProductToOrderDetails")
 }
