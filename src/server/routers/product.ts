@@ -19,19 +19,29 @@ export const productRouter = router({
       return { products: products };
     }
   }),
-  getProducts: publicProcedure.query(async () => {
-    prisma.$connect();
-    const products = await prisma.products.findMany({
-      include: { color_quantity: true },
-    });
-    prisma.$disconnect();
+  getProducts: publicProcedure
+    .input(
+      z.object({
+        start: z.number(),
+        end: z.number(),
+      })
+    )
+    .query(async ({ input }) => {
+      prisma.$connect();
+      console.log({ skip: input.start, take: input.end });
+      const products = await prisma.products.findMany({
+        include: { color_quantity: true },
+        skip: input.start,
+        take: input.end,
+      });
+      prisma.$disconnect();
 
-    if (products) {
-      return { message: true, products: products };
-    } else {
-      return { message: false, products: [] };
-    }
-  }),
+      if (products) {
+        return { message: true, products: products };
+      } else {
+        return { message: false, products: [] };
+      }
+    }),
   getProductsByCategoryAndType: publicProcedure
     .input(z.object({ category: z.string(), type: z.string() }))
     .query(async ({ input }) => {
