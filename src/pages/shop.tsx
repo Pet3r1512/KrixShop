@@ -17,10 +17,7 @@ export default function Shop() {
   const [loading, setLoading] = useState(true);
   const [filtering, setFiltering] = useState(false);
   const [products, setProducts] = useState<any[]>([]);
-  const [range, setRange] = useState({
-    start: 0,
-    end: 10,
-  });
+  const [range, setRange] = useState({ start: 0 });
 
   const debouncedSearch = useDebounce(search, 750);
 
@@ -115,7 +112,7 @@ export default function Shop() {
           </p>
         )
       )} */}
-      <section className="grid md:grid-cols-3 lg:grid-cols-4 gap-y-3.5 grid-cols-2 justify-center lg:py-16 py-4 px-4 lg:px-0">
+      <section className="grid md:grid-cols-3 lg:grid-cols-4 gap-y-3.5 grid-cols-2 justify-center lg:py-16 py-4 px-4 lg:px-0 min-h-[1465px]">
         {products.length > 0 &&
           products.map((product) => {
             return (
@@ -128,14 +125,20 @@ export default function Shop() {
           [...Array(4)].map((_, index) => <CardSkeleton key={index} />)}
       </section>
       <Button
+        disabled={
+          (productsQuery.data && productsQuery.data.products.length < 10) ||
+          productsQuery.isLoading
+            ? true
+            : false
+        }
         onClick={() => {
           setRange({
-            start: range.end,
-            end: range.end + 10,
+            start: range.start + 10,
           });
         }}
+        className="w-28 px-5 py-2 rounded-lg mx-auto my-5"
       >
-        Load More
+        {productsQuery.isLoading ? "..." : "Load More"}
       </Button>
     </Layout>
   );
