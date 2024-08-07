@@ -23,16 +23,14 @@ export const productRouter = router({
     .input(
       z.object({
         start: z.number(),
-        end: z.number(),
       })
     )
     .query(async ({ input }) => {
       prisma.$connect();
-      console.log({ skip: input.start, take: input.end });
       const products = await prisma.products.findMany({
         include: { color_quantity: true },
         skip: input.start,
-        take: input.end,
+        take: 10,
       });
       prisma.$disconnect();
 
