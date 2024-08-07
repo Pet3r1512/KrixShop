@@ -1,5 +1,5 @@
 import { formatCurrency } from "@/lib/utils";
-import { Button } from "../UI/ui/button";
+import Link from "next/link";
 
 export default function MoneyCheck({ total }: { total: number }) {
   return (
@@ -8,9 +8,12 @@ export default function MoneyCheck({ total }: { total: number }) {
         <p className="lg:text-xl font-bold">Subtotal</p>
         <p className="lg:text-lg">{formatCurrency(total.toString(), false)}</p>
       </div>
-      <Button className="lg:px-4 py-1.5 w-fit lg:w-auto px-6 ml-auto lg:ml-0">
+      <Link
+        href={"/shipment"}
+        className="lg:px-4 py-1.5 w-fit lg:w-auto px-6 ml-auto lg:ml-0 bg-primary text-white rounded-lg font-semibold text-center"
+      >
         Next Step
-      </Button>
+      </Link>
     </section>
   );
 }
