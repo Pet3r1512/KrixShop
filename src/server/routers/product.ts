@@ -78,6 +78,21 @@ export const productRouter = router({
         return { message: true, item: product };
       }
     }),
+  search: publicProcedure
+    .input(z.object({ keywords: z.string() }))
+    .query(async ({ input }) => {
+      prisma.$connect();
+      const matchedProducts = await prisma.products.findMany({
+        where: {
+          product_name: {
+            contains: input.keywords,
+            mode: "insensitive",
+          },
+        },
+      });
+      prisma.$disconnect();
+      return { result: matchedProducts || [] };
+    }),
 });
 
 export type AppRouter = typeof productRouter;
