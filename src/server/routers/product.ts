@@ -1,48 +1,48 @@
 import { publicProcedure, router } from "../tRPC";
-import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 
-const prisma = new PrismaClient();
-
 export const productRouter = router({
-  getCategoriesProducts: publicProcedure.query(async () => {
-    prisma.$connect();
-    const products = await prisma.categories.findMany({
+  getCategoriesProducts: publicProcedure.query(async ({ ctx }) => {
+    const products = await ctx.prisma.categories.findMany({
       select: {
         id: true,
         name: true,
         image: true,
       },
     });
-    prisma.$disconnect();
+
     if (products) {
       return { products: products };
     }
   }),
-  getProducts: publicProcedure.query(async () => {
-    prisma.$connect();
-    const products = await prisma.products.findMany({
-      include: { color_quantity: true },
-    });
-    prisma.$disconnect();
+  getProducts: publicProcedure
+    .input(
+      z.object({
+        start: z.number(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const products = await ctx.prisma.products.findMany({
+        include: { color_quantity: true },
+        skip: input.start,
+        take: 10,
+      });
 
-    if (products) {
-      return { message: true, products: products };
-    } else {
-      return { message: false, products: [] };
-    }
-  }),
+      if (products) {
+        return { message: true, products: products };
+      } else {
+        return { message: false, products: [] };
+      }
+    }),
   getProductsByCategoryAndType: publicProcedure
     .input(z.object({ category: z.string(), type: z.string() }))
-    .query(async ({ input }) => {
-      prisma.$connect();
-      const productsByCategory = await prisma.products.findMany({
+    .query(async ({ input, ctx }) => {
+      const productsByCategory = await ctx.prisma.products.findMany({
         where: {
           category: input.category,
           class: input.type,
         },
       });
-      prisma.$disconnect();
 
       if (productsByCategory) {
         return {
@@ -57,18 +57,30 @@ export const productRouter = router({
     }),
   getProductById: publicProcedure
     .input(z.object({ xid: z.string() }))
-    .query(async ({ input }) => {
-      prisma.$connect();
-      const product = await prisma.products.findUnique({
+    .query(async ({ input, ctx }) => {
+      const product = await ctx.prisma.products.findUnique({
         where: {
           xata_id: input.xid,
         },
       });
-      prisma.$disconnect();
 
       if (product) {
         return { message: true, item: product };
       }
+    }),
+  search: publicProcedure
+    .input(z.object({ keywords: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const matchedProducts = await ctx.prisma.products.findMany({
+        where: {
+          product_name: {
+            contains: input.keywords,
+            mode: "insensitive",
+          },
+        },
+      });
+
+      return { result: matchedProducts || [] };
     }),
 });
 
