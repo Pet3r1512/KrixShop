@@ -26,7 +26,7 @@ export default function ItemsTable({
       0
     );
     setSubtotal(total);
-  }, []);
+  });
 
   return (
     <Table>
