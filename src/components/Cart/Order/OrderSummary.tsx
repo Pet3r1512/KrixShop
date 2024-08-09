@@ -12,7 +12,7 @@ export default function OrderSummary({ address }: { address: Address }) {
       <p className="lg:text-xl font-bold">Order Summary</p>
       <Accordion type="multiple">
         <AccordionItem value="cart">
-          <AccordionTrigger>Cart's Info</AccordionTrigger>
+          <AccordionTrigger>{"Cart's Info"}</AccordionTrigger>
           <AccordionContent>
             <p>
               Number of items: <span>4</span>
@@ -26,7 +26,7 @@ export default function OrderSummary({ address }: { address: Address }) {
           <AccordionTrigger>Ship Location</AccordionTrigger>
           <AccordionContent>
             <p>
-              Province/City:{" "}
+              {"Province/City "}
               <span>{address.province ? address.province : ""}</span>
             </p>
             <p>
