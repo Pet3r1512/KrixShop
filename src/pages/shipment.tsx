@@ -1,3 +1,4 @@
+import OrderSummary from "@/components/Cart/Order/OrderSummary";
 import Layout from "@/components/UI/Layout";
 import {
   Select,
@@ -13,11 +14,11 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-type Address = {
+export type Address = {
   province: string;
-  district?: string;
-  ward?: string;
-  street?: string;
+  district: string;
+  ward: string;
+  street: string;
   note?: string;
 };
 
@@ -28,10 +29,16 @@ type Province = {
 };
 
 export default function Shipment() {
-  const [address, setAddress] = useState<Address>();
+  const [address, setAddress] = useState<Address>({
+    province: "",
+    district: "",
+    ward: "",
+    street: "",
+    note: "",
+  });
+  const [orderId, setOrderId] = useState("");
   const { readItems } = useCart();
   const router = useRouter();
-  const orderId = new Date().getTime();
 
   const provincesQuery = trpc.province.getProvince.useQuery();
   const provinces = provincesQuery.isSuccess ? provincesQuery.data.results : [];
@@ -40,28 +47,50 @@ export default function Shipment() {
     if (readItems().length === 0) {
       router.push("/shop");
     }
+    setOrderId(new Date().getTime().toString().slice(-8));
   }, []);
 
   return (
     <Layout pageName="Shipment">
-      <section>
-        {"Your order id: " + orderId ? orderId : ""}
-        <label htmlFor="province">Please Select Your Province/City</label>
-        <Select>
-          <SelectTrigger className="lg:w-1/2">
-            <SelectValue placeholder="Province/City" />
-          </SelectTrigger>
-          <SelectContent>
-            {provinces.map((item: Province) => {
-              return (
-                <SelectItem key={item.province_id} value={item.province_name}>
-                  {item.province_name}
-                </SelectItem>
-              );
-            })}
-          </SelectContent>
-        </Select>
-      </section>
+      <main className="lg:my-8 my-4 min-h-screen lg:min-h-0 px-4 lg:px-0 flex">
+        <div className="flex flex-col gap-y-4 lg:w-[75%]">
+          <p className="text-2xl lg:text-4xl font-semibold">
+            Order ID: <span className="text-lg lg:text-2xl">{orderId}</span>
+          </p>
+          <section className="lg:my-8">
+            <div className="flex flex-col gap-y-5">
+              <label className="lg:text-lg font-semibold" htmlFor="province">
+                Province/City
+              </label>
+              <Select
+                onValueChange={(e) => {
+                  setAddress((prevAddress) => ({
+                    ...prevAddress,
+                    province: e,
+                  }));
+                }}
+              >
+                <SelectTrigger className="lg:w-1/2">
+                  <SelectValue placeholder="Please select your province/city" />
+                </SelectTrigger>
+                <SelectContent>
+                  {provinces.map((item: Province) => {
+                    return (
+                      <SelectItem
+                        key={item.province_id}
+                        value={item.province_name}
+                      >
+                        {item.province_name}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            </div>
+          </section>
+        </div>
+        <OrderSummary address={address!} />
+      </main>
     </Layout>
   );
 }
