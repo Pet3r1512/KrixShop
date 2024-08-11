@@ -25,19 +25,12 @@ export default function OrderSummary({ address }: { address: Address }) {
         <AccordionItem value="shipment">
           <AccordionTrigger>Ship Location</AccordionTrigger>
           <AccordionContent className="lg:text-lg font-normal">
+            <p>{address.province ? address.province.split("|")[0] : ""}</p>
+            <p>{address.district ? address.district.split("|")[0] : ""}</p>
             <p>
-              {"Province/City "}
-              <span>{address.province ? address.province : ""}</span>
+              <span>{address.ward ? address.ward.split("|")[0] : ""}</span>
             </p>
-            <p>
-              District <span>{address.district ? address.district : ""}</span>
-            </p>
-            <p>
-              Ward: <span>{address.ward ? address.ward : ""}</span>
-            </p>
-            <p>
-              Street: <span>{address.street ? address.street : ""}</span>
-            </p>
+            <p>{address.street ? address.street : ""}</p>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="payment">
