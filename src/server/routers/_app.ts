@@ -1,10 +1,10 @@
 import { router } from "../tRPC";
 import { productRouter } from "./product";
-import { provinceRouter } from "./province_api";
+import { addressRouter } from "./address";
 
 export const appRouter = router({
   product: productRouter,
-  province: provinceRouter,
+  address: addressRouter,
 });
 
 export type AppRouter = typeof appRouter;
