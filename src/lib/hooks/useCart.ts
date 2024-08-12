@@ -6,6 +6,7 @@ export const useCart = () => {
   const removeItem = useCartStore((state) => state.removeItem);
   const readItems = useCartStore((state) => state.readItems);
   const count = useCartStore((state) => state.count);
+  const getCurrentOrder = useCartStore((state) => state.getCurrentOrder);
 
   return {
     items,
@@ -13,5 +14,6 @@ export const useCart = () => {
     removeItem,
     readItems,
     count,
+    getCurrentOrder,
   };
 };
