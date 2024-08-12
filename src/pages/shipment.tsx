@@ -1,5 +1,6 @@
 import OrderSummary from "@/components/Cart/Order/OrderSummary";
 import Layout from "@/components/UI/Layout";
+import { Input } from "@/components/UI/ui/input";
 import {
   Select,
   SelectContent,
@@ -8,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/UI/ui/select";
 import { useCart } from "@/lib/hooks/useCart";
+import { useDebounce } from "@/lib/hooks/useDebounce";
 import { trpc } from "@/server/utils/tRPC";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -49,8 +51,21 @@ export default function Shipment() {
     note: "",
   });
   const [orderId, setOrderId] = useState("");
+  const [streetInput, setStreetInput] = useState("");
+  const [note, setNote] = useState("");
   const { readItems } = useCart();
   const router = useRouter();
+
+  const debouncedStreetInput = useDebounce(streetInput, 750);
+  const debouncedNote = useDebounce(note, 750);
+
+  useEffect(() => {
+    setAddress((prevAddress) => ({
+      ...prevAddress,
+      street: debouncedStreetInput,
+      note: debouncedNote,
+    }));
+  }, [debouncedStreetInput, debouncedNote]);
 
   const provincesQuery = trpc.address.getProvinces.useQuery();
   const provinces = provincesQuery.isSuccess ? provincesQuery.data.results : [];
@@ -75,11 +90,11 @@ export default function Shipment() {
   return (
     <Layout pageName="Shipment">
       <main className="lg:my-8 my-4 min-h-screen lg:min-h-0 px-4 lg:px-0 flex">
-        <div className="flex flex-col gap-y-4 lg:w-[75%]">
+        <div className="flex flex-col gap-y-4 lg:w-[75%] pr-5 h-full">
           <p className="text-2xl lg:text-4xl font-semibold">
             Order ID: <span className="text-lg lg:text-2xl">{orderId}</span>
           </p>
-          <section className="lg:my-8 flex flex-col gap-y-8">
+          <section className="lg:my-8 flex flex-col gap-y-8 min-h-full">
             <div className="flex flex-col gap-y-3.5">
               <label className="lg:text-lg font-semibold" htmlFor="province">
                 Province/City
@@ -92,7 +107,7 @@ export default function Shipment() {
                   }));
                 }}
               >
-                <SelectTrigger className="lg:w-1/2">
+                <SelectTrigger className="lg:w-2/3">
                   <SelectValue placeholder="Please select your province/city" />
                 </SelectTrigger>
                 <SelectContent>
@@ -122,7 +137,7 @@ export default function Shipment() {
                     }));
                   }}
                 >
-                  <SelectTrigger className="lg:w-1/2">
+                  <SelectTrigger className="lg:w-2/3">
                     <SelectValue placeholder="Please select your district" />
                   </SelectTrigger>
                   <SelectContent>
@@ -155,7 +170,7 @@ export default function Shipment() {
                     }));
                   }}
                 >
-                  <SelectTrigger className="lg:w-1/2">
+                  <SelectTrigger className="lg:w-2/3">
                     <SelectValue placeholder="Please select your ward" />
                   </SelectTrigger>
                   <SelectContent>
@@ -171,6 +186,43 @@ export default function Shipment() {
                     })}
                   </SelectContent>
                 </Select>
+              </div>
+            ) : (
+              <></>
+            )}
+            {address.province !== "" &&
+            address.district !== "" &&
+            address.ward !== "" ? (
+              <div className="flex flex-col gap-y-3.5">
+                <label className="lg:text-lg font-semibold" htmlFor="province">
+                  House's Number and Street
+                </label>
+                <Input
+                  onChange={(e) => {
+                    setStreetInput(e.target.value);
+                  }}
+                  className="lg:w-2/3"
+                  placeholder="73 Lê Văn Sỹ"
+                />
+              </div>
+            ) : (
+              <></>
+            )}
+            {address.province !== "" &&
+            address.district !== "" &&
+            address.ward !== "" &&
+            address.street !== "" ? (
+              <div className="flex flex-col gap-y-3.5">
+                <label className="lg:text-lg font-semibold" htmlFor="province">
+                  Note
+                </label>
+                <Input
+                  onChange={(e) => {
+                    setNote(e.target.value);
+                  }}
+                  className="lg:w-2/3"
+                  placeholder="Block A, B..."
+                />
               </div>
             ) : (
               <></>
