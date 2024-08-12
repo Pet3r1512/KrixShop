@@ -22,10 +22,22 @@ export type Address = {
   note?: string;
 };
 
-type Province = {
+export type Province = {
   province_id: number;
   province_name: string;
   province_type: string;
+};
+
+export type District = {
+  district_id: number;
+  district_name: string;
+  district_type: string;
+};
+
+export type Ward = {
+  ward_id: number;
+  ward_name: string;
+  ward_type: string;
 };
 
 export default function Shipment() {
@@ -40,8 +52,18 @@ export default function Shipment() {
   const { readItems } = useCart();
   const router = useRouter();
 
-  const provincesQuery = trpc.province.getProvince.useQuery();
+  const provincesQuery = trpc.address.getProvinces.useQuery();
   const provinces = provincesQuery.isSuccess ? provincesQuery.data.results : [];
+
+  const districtsQuery = trpc.address.getDistricts.useQuery({
+    province_id: address.province.toString().split("|")[1],
+  });
+  const districts = districtsQuery.isSuccess ? districtsQuery.data.results : [];
+
+  const wardsQuery = trpc.address.getWards.useQuery({
+    district_id: address.district.toString().split("|")[1],
+  });
+  const wards = wardsQuery.isSuccess ? wardsQuery.data.results : [];
 
   useEffect(() => {
     if (readItems().length === 0) {
@@ -57,8 +79,8 @@ export default function Shipment() {
           <p className="text-2xl lg:text-4xl font-semibold">
             Order ID: <span className="text-lg lg:text-2xl">{orderId}</span>
           </p>
-          <section className="lg:my-8">
-            <div className="flex flex-col gap-y-5">
+          <section className="lg:my-8 flex flex-col gap-y-8">
+            <div className="flex flex-col gap-y-3.5">
               <label className="lg:text-lg font-semibold" htmlFor="province">
                 Province/City
               </label>
@@ -78,7 +100,7 @@ export default function Shipment() {
                     return (
                       <SelectItem
                         key={item.province_id}
-                        value={item.province_name}
+                        value={item.province_name + "|" + item.province_id}
                       >
                         {item.province_name}
                       </SelectItem>
@@ -87,6 +109,72 @@ export default function Shipment() {
                 </SelectContent>
               </Select>
             </div>
+            {districts && address.province !== "" ? (
+              <div className="flex flex-col gap-y-3.5">
+                <label className="lg:text-lg font-semibold" htmlFor="province">
+                  District
+                </label>
+                <Select
+                  onValueChange={(e) => {
+                    setAddress((prevAddress) => ({
+                      ...prevAddress,
+                      district: e,
+                    }));
+                  }}
+                >
+                  <SelectTrigger className="lg:w-1/2">
+                    <SelectValue placeholder="Please select your district" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {districts.map((item: District) => {
+                      return (
+                        <SelectItem
+                          key={item.district_id}
+                          value={item.district_name + "|" + item.district_id}
+                        >
+                          {item.district_name}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+            ) : (
+              <></>
+            )}
+            {wards && address.province !== "" && address.district !== "" ? (
+              <div className="flex flex-col gap-y-3.5">
+                <label className="lg:text-lg font-semibold" htmlFor="province">
+                  Wards
+                </label>
+                <Select
+                  onValueChange={(e) => {
+                    setAddress((prevAddress) => ({
+                      ...prevAddress,
+                      ward: e,
+                    }));
+                  }}
+                >
+                  <SelectTrigger className="lg:w-1/2">
+                    <SelectValue placeholder="Please select your ward" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {wards.map((item: Ward) => {
+                      return (
+                        <SelectItem
+                          key={item.ward_id}
+                          value={item.ward_name + "|" + item.ward_id}
+                        >
+                          {item.ward_name}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+            ) : (
+              <></>
+            )}
           </section>
         </div>
         <OrderSummary address={address!} />
