@@ -25,6 +25,7 @@ export type CartActions = {
   ) => void;
   readItems: () => Item[];
   count: () => number;
+  getCurrentOrder: () => { NumberOfItems: number; subtotal: number };
 };
 
 // Combine CartState and CartActions to form the CartStore type
@@ -75,5 +76,17 @@ export const useCartStore = create<CartStore>((set, get) => ({
       count += item.selectedQuantity;
     });
     return count;
+  },
+  getCurrentOrder: () => {
+    let subtotal = 0;
+    let NumberOfItems = 0;
+    get().items.map((item) => {
+      subtotal += item.price * item.selectedQuantity;
+      NumberOfItems += item.selectedQuantity;
+    });
+    return {
+      NumberOfItems: NumberOfItems,
+      subtotal: subtotal,
+    };
   },
 }));
