@@ -195,7 +195,7 @@ export default function Shipment() {
             address.ward !== "" ? (
               <div className="flex flex-col gap-y-3.5">
                 <label className="lg:text-lg font-semibold" htmlFor="province">
-                  House's Number and Street
+                  House Number and Street
                 </label>
                 <Input
                   onChange={(e) => {
