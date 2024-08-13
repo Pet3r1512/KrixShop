@@ -111,16 +111,20 @@ export default function Shipment() {
                   <SelectValue placeholder="Please select your province/city" />
                 </SelectTrigger>
                 <SelectContent>
-                  {provinces.map((item: Province) => {
-                    return (
-                      <SelectItem
-                        key={item.province_id}
-                        value={item.province_name + "|" + item.province_id}
-                      >
-                        {item.province_name}
-                      </SelectItem>
-                    );
-                  })}
+                  {provincesQuery.isLoading ? (
+                    <span>Loading...</span>
+                  ) : (
+                    provinces.map((item: Province) => {
+                      return (
+                        <SelectItem
+                          key={item.province_id}
+                          value={item.province_name + "|" + item.province_id}
+                        >
+                          {item.province_name}
+                        </SelectItem>
+                      );
+                    })
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -141,16 +145,20 @@ export default function Shipment() {
                     <SelectValue placeholder="Please select your district" />
                   </SelectTrigger>
                   <SelectContent>
-                    {districts.map((item: District) => {
-                      return (
-                        <SelectItem
-                          key={item.district_id}
-                          value={item.district_name + "|" + item.district_id}
-                        >
-                          {item.district_name}
-                        </SelectItem>
-                      );
-                    })}
+                    {districtsQuery.isLoading ? (
+                      <span>Loading...</span>
+                    ) : (
+                      districts.map((item: District) => {
+                        return (
+                          <SelectItem
+                            key={item.district_id}
+                            value={item.district_name + "|" + item.district_id}
+                          >
+                            {item.district_name}
+                          </SelectItem>
+                        );
+                      })
+                    )}
                   </SelectContent>
                 </Select>
               </div>
@@ -174,16 +182,20 @@ export default function Shipment() {
                     <SelectValue placeholder="Please select your ward" />
                   </SelectTrigger>
                   <SelectContent>
-                    {wards.map((item: Ward) => {
-                      return (
-                        <SelectItem
-                          key={item.ward_id}
-                          value={item.ward_name + "|" + item.ward_id}
-                        >
-                          {item.ward_name}
-                        </SelectItem>
-                      );
-                    })}
+                    {wardsQuery.isLoading ? (
+                      <span>Loading...</span>
+                    ) : (
+                      wards.map((item: Ward) => {
+                        return (
+                          <SelectItem
+                            key={item.ward_id}
+                            value={item.ward_name + "|" + item.ward_id}
+                          >
+                            {item.ward_name}
+                          </SelectItem>
+                        );
+                      })
+                    )}
                   </SelectContent>
                 </Select>
               </div>
