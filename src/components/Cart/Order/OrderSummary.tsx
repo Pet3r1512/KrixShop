@@ -6,14 +6,25 @@ import {
 } from "@/components/UI/ui/accordion";
 import { Button } from "@/components/UI/ui/button";
 import { toast } from "@/components/UI/ui/use-toast";
+import { useAddress } from "@/lib/hooks/useAddress";
 import { useCart } from "@/lib/hooks/useCart";
 import { formatCurrency } from "@/lib/utils";
 import { Address } from "@/pages/shipment";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-export default function OrderSummary({ address }: { address: Address }) {
+export default function OrderSummary({ address }: { address?: Address }) {
+  const [selectedAddress, setSelectedAddress] = useState<Address>();
   const router = useRouter();
   const { getCurrentOrder } = useCart();
+  const { setAddress, getAddress } = useAddress();
+
+  useEffect(() => {
+    if (!address) {
+      setSelectedAddress(getAddress());
+    }
+  }, []);
+
   return (
     <section className="flex-1">
       <p className="lg:text-2xl font-bold">Order Summary</p>
@@ -38,13 +49,25 @@ export default function OrderSummary({ address }: { address: Address }) {
         <AccordionItem value="shipment">
           <AccordionTrigger>Ship Location</AccordionTrigger>
           <AccordionContent className="lg:text-lg font-normal">
-            <p>{address.province ? address.province.split("|")[0] : ""}</p>
-            <p>{address.district ? address.district.split("|")[0] : ""}</p>
             <p>
-              <span>{address.ward ? address.ward.split("|")[0] : ""}</span>
+              {address
+                ? address.province.split("|")[0]
+                : selectedAddress?.province.split("|")[0]}
             </p>
-            <p>{address.street ? address.street : ""}</p>
-            <p>{address.note ? address.note : ""}</p>
+            <p>
+              {address
+                ? address.district.split("|")[0]
+                : selectedAddress?.district.split("|")[0]}
+            </p>
+            <p>
+              <span>
+                {address
+                  ? address.ward.split("|")[0]
+                  : selectedAddress?.ward.split("|")[0]}
+              </span>
+            </p>
+            <p>{address ? address.street : selectedAddress?.street}</p>
+            <p>{address ? address.note : selectedAddress?.note}</p>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="payment">
@@ -58,17 +81,24 @@ export default function OrderSummary({ address }: { address: Address }) {
       </Accordion>
       <Button
         onClick={() => {
-          address.district === "" ||
-          address.province === "" ||
-          address.ward === "" ||
-          address.street === ""
-            ? toast({
-                title: "Please Select All Fields",
-                duration: 1500,
-                className:
-                  "bg-[#fcbf49] text-white fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-2 sm:right-2 sm:top-auto sm:flex-col md:max-w-[420px] rounded-xl",
-              })
-            : router.push("/payment");
+          const isValid =
+            address &&
+            address.district !== "" &&
+            address.province !== "" &&
+            address.ward !== "" &&
+            address.street !== "";
+
+          if (!isValid) {
+            toast({
+              title: "Please Select All Fields",
+              duration: 1500,
+              className:
+                "bg-[#fcbf49] text-white fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-2 sm:right-2 sm:top-auto sm:flex-col md:max-w-[420px] rounded-xl",
+            });
+          } else {
+            setAddress(address);
+            router.push("/payment");
+          }
         }}
         className="w-full"
       >
