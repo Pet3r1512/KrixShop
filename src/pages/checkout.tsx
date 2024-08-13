@@ -1,10 +1,10 @@
 import ItemsTable from "@/components/Cart/ItemsTable";
-import MoneyCheck from "@/components/Cart/MoneyCheck";
 import Layout from "@/components/UI/Layout";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useState } from "react";
 import { useCart } from "@/lib/hooks/useCart";
+import OrderSummary from "@/components/Cart/Order/OrderSummary";
 
 export default function Checkout() {
   const [subtotal, setSubtotal] = useState(0);
@@ -18,10 +18,10 @@ export default function Checkout() {
       ) : (
         <main className="lg:my-8 my-4 min-h-screen lg:min-h-0 px-4 lg:px-0">
           <p className="text-2xl lg:text-4xl font-semibold">Checkout</p>
-          <section className="flex flex-col lg:flex-row lg:items-center gap-x-10 mt-6">
+          <section className="flex flex-col lg:flex-row gap-x-10 mt-6">
             <ItemsTable subtotal={subtotal} setSubtotal={setSubtotal} />
             <div className="w-full lg:w-[25%] self-start mt-24 lg:mt-0">
-              <MoneyCheck total={subtotal} />
+              <OrderSummary />
             </div>
           </section>
         </main>
