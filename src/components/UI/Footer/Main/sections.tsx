@@ -12,7 +12,7 @@ export default function SectionNav() {
     },
     {
       name: "My Cart",
-      href: "",
+      href: "/checkout",
     },
   ];
 
