@@ -21,7 +21,7 @@ type ItemParams = {
 };
 
 export default function ItemDetail() {
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
   const router = useRouter();
   const [itemParams, setItemParams] = useState<ItemParams>({
     color: (router.query.color as string) || "",
