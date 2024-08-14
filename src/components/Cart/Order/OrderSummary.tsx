@@ -13,7 +13,13 @@ import { Address } from "@/pages/shipment";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-export default function OrderSummary({ address }: { address?: Address }) {
+export default function OrderSummary({
+  address,
+  payMethod,
+}: {
+  address?: Address;
+  payMethod?: string;
+}) {
   const [selectedAddress, setSelectedAddress] = useState<Address>();
   const [step, setStep] = useState(0);
   const router = useRouter();
@@ -91,7 +97,7 @@ export default function OrderSummary({ address }: { address?: Address }) {
             <AccordionTrigger>Payment</AccordionTrigger>
             <AccordionContent className="lg:text-lg font-normal">
               <p>
-                Method: <span>Transfer</span>
+                Method: <span className="font-bold">{payMethod}</span>
               </p>
             </AccordionContent>
           </AccordionItem>
