@@ -42,7 +42,7 @@ export type Ward = {
   ward_type: string;
 };
 
-export default function Shipment() {
+const Shipment = () => {
   const [address, setAddress] = useState<Address>({
     province: "",
     district: "",
@@ -89,12 +89,12 @@ export default function Shipment() {
 
   return (
     <Layout pageName="Shipment">
-      <main className="lg:my-8 my-4 min-h-screen lg:min-h-0 px-4 lg:px-0 flex">
-        <div className="flex flex-col gap-y-4 lg:w-[75%] pr-5 h-full">
-          <p className="text-2xl lg:text-4xl font-semibold">
-            Order ID: <span className="text-lg lg:text-2xl">{orderId}</span>
-          </p>
-          <section className="lg:my-8 flex flex-col gap-y-8 min-h-full">
+      <main className="lg:my-8 my-4 min-h-screen lg:min-h-0 px-4 lg:px-0">
+        <p className="text-2xl lg:text-4xl font-semibold">
+          Order ID: <span className="text-lg lg:text-2xl">{orderId}</span>
+        </p>
+        <section className="flex flex-col lg:flex-row gap-x-10 mt-6">
+          <section className="w-full lg:my-8 flex flex-col gap-y-8 min-h-full">
             <div className="flex flex-col gap-y-3.5">
               <label className="lg:text-lg font-semibold" htmlFor="province">
                 Province/City
@@ -240,12 +240,16 @@ export default function Shipment() {
               <></>
             )}
           </section>
-        </div>
-        <OrderSummary address={address!} />
+          <div className="w-full lg:w-[25%] self-start mt-24 lg:mt-0">
+            <OrderSummary address={address!} />
+          </div>
+        </section>
       </main>
     </Layout>
   );
-}
+};
+
+export default Shipment;
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => ({
   props: {
