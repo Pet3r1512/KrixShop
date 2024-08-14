@@ -6,7 +6,7 @@ export default function SaleoffBadge({
   className,
   isOutStock,
 }: {
-  saleoff: number;
+  saleoff?: number;
   className?: string;
   isOutStock?: boolean;
 }) {
