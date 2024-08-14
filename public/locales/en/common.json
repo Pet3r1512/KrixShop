@@ -16,7 +16,7 @@
         "quantity": "Quantity",
         "add_to_cart": "Add To Cart",
         "toast": {
-            "warning": "Please select color and size",
+            "warning": "Please select color, size and quantity",
             "success": "added successfully"
         }
     }

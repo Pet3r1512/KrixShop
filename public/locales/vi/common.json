@@ -16,7 +16,7 @@
         "quantity": "Số Lượng",
         "add_to_cart": "Thêm Vào Giỏ Hàng",
         "toast": {
-            "warning": "Vui lòng chọn màu và kích cỡ",
+            "warning": "Vui lòng chọn màu, kích cỡ và số lượng",
             "success": "đã được thêm thành công"
         }
     }
