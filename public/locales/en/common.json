@@ -19,5 +19,13 @@
             "warning": "Please select color, size and quantity",
             "success": "added successfully"
         }
+    },
+    "checkout": {
+        "payment": {
+            "instructions": {
+                "cash": "Please pay the {{subtotal}} amount to the operator upon receipt of the order.",
+                "card": "Please fill in all information so we can authenticate your card and identity."
+            }
+        }
     }
 }

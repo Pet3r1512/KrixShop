@@ -19,5 +19,13 @@
             "warning": "Vui lòng chọn màu, kích cỡ và số lượng",
             "success": "đã được thêm thành công"
         }
+    },
+    "checkout": {
+        "payment": {
+            "instructions": {
+                "cash": "Vui lòng thanh toán số tiền {{subtotal}} cho người vận chuyển khi nhận được đơn hàng.",
+                "card": "Vui lòng điền đầy đủ các thông tin chúng tôi có thể xác thực thẻ và danh tính của bạn."
+            }
+        }
     }
 }
