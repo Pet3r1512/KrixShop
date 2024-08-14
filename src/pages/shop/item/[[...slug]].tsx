@@ -136,10 +136,10 @@ export default function ItemDetail() {
                 {product.product_name}
               </p>
               <div className="flex items-center gap-x-2 w-fit">
-                {product.saleoff && (
+                {product.saleoff! > 0 && (
                   <SaleoffBadge
                     className="size-10 text-sm"
-                    saleoff={product.saleoff}
+                    saleoff={product.saleoff || 0}
                   />
                 )}
                 <button
