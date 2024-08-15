@@ -15,7 +15,6 @@ export default function PaymentMethods({
         setPayMethod(e);
       }}
       className="flex items-center gap-x-5"
-      defaultValue="COD"
     >
       {payments.map((payment) => {
         return (

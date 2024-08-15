@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/UI/ui/select";
+import { useAddress } from "@/lib/hooks/useAddress";
 import { useCart } from "@/lib/hooks/useCart";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { trpc } from "@/server/utils/tRPC";
@@ -54,6 +55,7 @@ const Shipment = () => {
   const [streetInput, setStreetInput] = useState("");
   const [note, setNote] = useState("");
   const { readItems } = useCart();
+  const { getAddress } = useAddress();
   const router = useRouter();
 
   const debouncedStreetInput = useDebounce(streetInput, 750);
@@ -71,12 +73,16 @@ const Shipment = () => {
   const provinces = provincesQuery.isSuccess ? provincesQuery.data.results : [];
 
   const districtsQuery = trpc.address.getDistricts.useQuery({
-    province_id: address.province.toString().split("|")[1],
+    province_id:
+      address.province.toString().split("|")[1] ||
+      getAddress().province.toString().split("|")[1],
   });
   const districts = districtsQuery.isSuccess ? districtsQuery.data.results : [];
 
   const wardsQuery = trpc.address.getWards.useQuery({
-    district_id: address.district.toString().split("|")[1],
+    district_id:
+      address.district.toString().split("|")[1] ||
+      getAddress().district.toString().split("|")[1],
   });
   const wards = wardsQuery.isSuccess ? wardsQuery.data.results : [];
 
@@ -106,6 +112,7 @@ const Shipment = () => {
                     province: e,
                   }));
                 }}
+                defaultValue={getAddress().province}
               >
                 <SelectTrigger className="lg:w-2/3">
                   <SelectValue placeholder="Please select your province/city" />
@@ -128,7 +135,7 @@ const Shipment = () => {
                 </SelectContent>
               </Select>
             </div>
-            {districts && address.province !== "" ? (
+            {getAddress().district || (districts && address.province !== "") ? (
               <div className="flex flex-col gap-y-3.5">
                 <label className="lg:text-lg font-semibold" htmlFor="province">
                   District
@@ -140,6 +147,7 @@ const Shipment = () => {
                       district: e,
                     }));
                   }}
+                  defaultValue={getAddress().district}
                 >
                   <SelectTrigger className="lg:w-2/3">
                     <SelectValue placeholder="Please select your district" />
@@ -153,6 +161,7 @@ const Shipment = () => {
                           <SelectItem
                             key={item.district_id}
                             value={item.district_name + "|" + item.district_id}
+                            defaultValue={getAddress().district}
                           >
                             {item.district_name}
                           </SelectItem>
@@ -165,7 +174,8 @@ const Shipment = () => {
             ) : (
               <></>
             )}
-            {wards && address.province !== "" && address.district !== "" ? (
+            {getAddress().ward ||
+            (wards && address.province !== "" && address.district !== "") ? (
               <div className="flex flex-col gap-y-3.5">
                 <label className="lg:text-lg font-semibold" htmlFor="province">
                   Wards
@@ -177,6 +187,7 @@ const Shipment = () => {
                       ward: e,
                     }));
                   }}
+                  defaultValue={getAddress().ward}
                 >
                   <SelectTrigger className="lg:w-2/3">
                     <SelectValue placeholder="Please select your ward" />
@@ -202,9 +213,10 @@ const Shipment = () => {
             ) : (
               <></>
             )}
-            {address.province !== "" &&
-            address.district !== "" &&
-            address.ward !== "" ? (
+            {getAddress().street ||
+            (address.province !== "" &&
+              address.district !== "" &&
+              address.ward !== "") ? (
               <div className="flex flex-col gap-y-3.5">
                 <label className="lg:text-lg font-semibold" htmlFor="province">
                   House Number and Street
@@ -215,15 +227,17 @@ const Shipment = () => {
                   }}
                   className="lg:w-2/3"
                   placeholder="73 Lê Văn Sỹ"
+                  defaultValue={getAddress().street}
                 />
               </div>
             ) : (
               <></>
             )}
-            {address.province !== "" &&
-            address.district !== "" &&
-            address.ward !== "" &&
-            address.street !== "" ? (
+            {getAddress().note ||
+            (address.province !== "" &&
+              address.district !== "" &&
+              address.ward !== "" &&
+              address.street !== "") ? (
               <div className="flex flex-col gap-y-3.5">
                 <label className="lg:text-lg font-semibold" htmlFor="province">
                   Note
@@ -234,6 +248,7 @@ const Shipment = () => {
                   }}
                   className="lg:w-2/3"
                   placeholder="Block A, B..."
+                  defaultValue={getAddress().note}
                 />
               </div>
             ) : (
