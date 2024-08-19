@@ -1,9 +1,11 @@
 import OrderSummary from "@/components/Cart/Order/OrderSummary";
+import Cards from "@/components/Cart/Payment/Instruction/Cards";
 import Cash from "@/components/Cart/Payment/Instruction/Cash";
 import PaymentMethods from "@/components/Cart/Payment/PaymentMethods";
 import Layout from "@/components/UI/Layout";
 import { useAddress } from "@/lib/hooks/useAddress";
 import { useCart } from "@/lib/hooks/useCart";
+import { formatCurrency } from "@/lib/utils";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
@@ -19,8 +21,10 @@ const Payment = () => {
   const { getCurrentOrder } = useCart();
 
   const PayMethodInstructionView: Record<PayMethod, JSX.Element> = {
-    COD: <Cash subtotal={getCurrentOrder().subtotal} />,
-    Cards: <></>,
+    COD: (
+      <Cash subtotal={formatCurrency(getCurrentOrder().subtotal.toString())} />
+    ),
+    Cards: <Cards />,
   };
 
   useEffect(() => {
