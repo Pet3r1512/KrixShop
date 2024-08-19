@@ -1,7 +1,11 @@
 import { useTranslation } from "react-i18next";
 
-export default function Cash({ subtotal }: { subtotal: number }) {
+export default function Cash({ subtotal }: { subtotal: string }) {
   const { t } = useTranslation("common");
 
-  return <p>{t("t.checkout.payment.instructions.cash", { subtotal })}</p>;
+  return (
+    <p className="lg:text-xl font-semibold">
+      {t("checkout.payment.instructions.cash", { subtotal })}
+    </p>
+  );
 }
