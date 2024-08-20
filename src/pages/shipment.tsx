@@ -26,21 +26,27 @@ export type Address = {
 };
 
 export type Province = {
-  province_id: number;
-  province_name: string;
-  province_type: string;
+  id: string;
+  name: string;
+  type: number;
+  typeText: string;
+  slug: string;
 };
 
 export type District = {
-  district_id: number;
-  district_name: string;
-  district_type: string;
+  id: string;
+  name: string;
+  provinceId: string;
+  typeText: string;
+  slug: string;
 };
 
 export type Ward = {
-  ward_id: number;
-  ward_name: string;
-  ward_type: string;
+  id: string;
+  name: string;
+  districtId: string;
+  typeText: string;
+  slug: string;
 };
 
 const Shipment = () => {
@@ -70,21 +76,21 @@ const Shipment = () => {
   }, [debouncedStreetInput, debouncedNote]);
 
   const provincesQuery = trpc.address.getProvinces.useQuery();
-  const provinces = provincesQuery.isSuccess ? provincesQuery.data.results : [];
+  const provinces = provincesQuery.isSuccess ? provincesQuery.data : [];
 
   const districtsQuery = trpc.address.getDistricts.useQuery({
-    province_id:
+    province_code:
       address.province.toString().split("|")[1] ||
       getAddress().province.toString().split("|")[1],
   });
-  const districts = districtsQuery.isSuccess ? districtsQuery.data.results : [];
+  const districts = districtsQuery.isSuccess ? districtsQuery.data : [];
 
   const wardsQuery = trpc.address.getWards.useQuery({
-    district_id:
+    district_code:
       address.district.toString().split("|")[1] ||
       getAddress().district.toString().split("|")[1],
   });
-  const wards = wardsQuery.isSuccess ? wardsQuery.data.results : [];
+  const wards = wardsQuery.isSuccess ? wardsQuery.data : [];
 
   useEffect(() => {
     if (readItems().length === 0) {
@@ -124,10 +130,10 @@ const Shipment = () => {
                     provinces.map((item: Province) => {
                       return (
                         <SelectItem
-                          key={item.province_id}
-                          value={item.province_name + "|" + item.province_id}
+                          key={item.id}
+                          value={item.name + "|" + item.id}
                         >
-                          {item.province_name}
+                          {item.name}
                         </SelectItem>
                       );
                     })
@@ -159,11 +165,11 @@ const Shipment = () => {
                       districts.map((item: District) => {
                         return (
                           <SelectItem
-                            key={item.district_id}
-                            value={item.district_name + "|" + item.district_id}
+                            key={item.id}
+                            value={item.name + "|" + item.id}
                             defaultValue={getAddress().district}
                           >
-                            {item.district_name}
+                            {item.name}
                           </SelectItem>
                         );
                       })
@@ -199,10 +205,10 @@ const Shipment = () => {
                       wards.map((item: Ward) => {
                         return (
                           <SelectItem
-                            key={item.ward_id}
-                            value={item.ward_name + "|" + item.ward_id}
+                            key={item.id}
+                            value={item.name + "|" + item.id}
                           >
-                            {item.ward_name}
+                            {item.name}
                           </SelectItem>
                         );
                       })
