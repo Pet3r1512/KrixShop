@@ -99,6 +99,10 @@ const Shipment = () => {
     setOrderId(new Date().getTime().toString().slice(-8));
   }, []);
 
+  useEffect(() => {
+    console.log(address);
+  }, [address]);
+
   return (
     <Layout pageName="Shipment">
       <main className="lg:my-8 my-4 min-h-screen lg:min-h-0 px-4 lg:px-0">
@@ -141,128 +145,121 @@ const Shipment = () => {
                 </SelectContent>
               </Select>
             </div>
-            {getAddress().district || (districts && address.province !== "") ? (
-              <div className="flex flex-col gap-y-3.5">
-                <label className="lg:text-lg font-semibold" htmlFor="province">
-                  District
-                </label>
-                <Select
-                  onValueChange={(e) => {
-                    setAddress((prevAddress) => ({
-                      ...prevAddress,
-                      district: e,
-                    }));
-                  }}
-                  defaultValue={getAddress().district}
-                >
-                  <SelectTrigger className="lg:w-2/3">
-                    <SelectValue placeholder="Please select your district" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {districtsQuery.isLoading ? (
-                      <span>Loading...</span>
-                    ) : (
-                      districts.map((item: District) => {
-                        return (
-                          <SelectItem
-                            key={item.id}
-                            value={item.name + "|" + item.id}
-                            defaultValue={getAddress().district}
-                          >
-                            {item.name}
-                          </SelectItem>
-                        );
-                      })
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
-            ) : (
-              <></>
-            )}
-            {getAddress().ward ||
-            (wards && address.province !== "" && address.district !== "") ? (
-              <div className="flex flex-col gap-y-3.5">
-                <label className="lg:text-lg font-semibold" htmlFor="province">
-                  Wards
-                </label>
-                <Select
-                  onValueChange={(e) => {
-                    setAddress((prevAddress) => ({
-                      ...prevAddress,
-                      ward: e,
-                    }));
-                  }}
-                  defaultValue={getAddress().ward}
-                >
-                  <SelectTrigger className="lg:w-2/3">
-                    <SelectValue placeholder="Please select your ward" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {wardsQuery.isLoading ? (
-                      <span>Loading...</span>
-                    ) : (
-                      wards.map((item: Ward) => {
-                        return (
-                          <SelectItem
-                            key={item.id}
-                            value={item.name + "|" + item.id}
-                          >
-                            {item.name}
-                          </SelectItem>
-                        );
-                      })
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
-            ) : (
-              <></>
-            )}
-            {getAddress().street ||
-            (address.province !== "" &&
-              address.district !== "" &&
-              address.ward !== "") ? (
-              <div className="flex flex-col gap-y-3.5">
-                <label className="lg:text-lg font-semibold" htmlFor="province">
-                  House Number and Street
-                </label>
-                <Input
-                  onChange={(e) => {
-                    setStreetInput(e.target.value);
-                  }}
-                  className="lg:w-2/3"
-                  placeholder="73 Lê Văn Sỹ"
-                  defaultValue={getAddress().street}
-                />
-              </div>
-            ) : (
-              <></>
-            )}
-            {getAddress().note ||
-            (address.province !== "" &&
-              address.district !== "" &&
-              address.ward !== "" &&
-              address.street !== "") ? (
-              <div className="flex flex-col gap-y-3.5">
-                <label className="lg:text-lg font-semibold" htmlFor="province">
-                  Note
-                </label>
-                <Input
-                  onChange={(e) => {
-                    setNote(e.target.value);
-                  }}
-                  className="lg:w-2/3"
-                  placeholder="Block A, B..."
-                  defaultValue={getAddress().note}
-                />
-              </div>
-            ) : (
-              <></>
-            )}
+            <div className="flex flex-col gap-y-3.5">
+              <label className="lg:text-lg font-semibold" htmlFor="province">
+                District
+              </label>
+              <Select
+                disabled={
+                  getAddress().district
+                    ? false
+                    : address.province !== "" && !districtsQuery.isLoading
+                    ? false
+                    : true
+                }
+                onValueChange={(e) => {
+                  setAddress((prevAddress) => ({
+                    ...prevAddress,
+                    district: e,
+                  }));
+                }}
+                defaultValue={getAddress().district}
+              >
+                <SelectTrigger className="lg:w-2/3">
+                  <SelectValue placeholder="Please select your district" />
+                </SelectTrigger>
+                <SelectContent>
+                  {districtsQuery.isLoading ? (
+                    <span>Loading...</span>
+                  ) : (
+                    districts.map((item: District) => {
+                      return (
+                        <SelectItem
+                          key={item.id}
+                          value={item.name + "|" + item.id}
+                          defaultValue={getAddress().district}
+                        >
+                          {item.name}
+                        </SelectItem>
+                      );
+                    })
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex flex-col gap-y-3.5">
+              <label className="lg:text-lg font-semibold" htmlFor="province">
+                Wards
+              </label>
+              <Select
+                disabled={
+                  getAddress().ward
+                    ? false
+                    : address.district !== "" && !wardsQuery.isLoading
+                    ? false
+                    : true
+                }
+                onValueChange={(e) => {
+                  setAddress((prevAddress) => ({
+                    ...prevAddress,
+                    ward: e,
+                  }));
+                }}
+                defaultValue={getAddress().ward}
+              >
+                <SelectTrigger className="lg:w-2/3">
+                  <SelectValue placeholder="Please select your ward" />
+                </SelectTrigger>
+                <SelectContent>
+                  {wardsQuery.isLoading ? (
+                    <span>Loading...</span>
+                  ) : (
+                    wards.map((item: Ward) => {
+                      return (
+                        <SelectItem
+                          key={item.id}
+                          value={item.name + "|" + item.id}
+                        >
+                          {item.name}
+                        </SelectItem>
+                      );
+                    })
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex flex-col gap-y-3.5">
+              <label className="lg:text-lg font-semibold" htmlFor="province">
+                House Number and Street
+              </label>
+              <Input
+                onChange={(e) => {
+                  setStreetInput(e.target.value);
+                }}
+                className="lg:w-2/3"
+                placeholder="73 Lê Văn Sỹ"
+                defaultValue={getAddress().street}
+              />
+            </div>
+            <div className="flex flex-col gap-y-3.5">
+              <label className="lg:text-lg font-semibold" htmlFor="province">
+                Note
+              </label>
+              <Input
+                onChange={(e) => {
+                  setNote(e.target.value);
+                }}
+                className="lg:w-2/3"
+                placeholder="Block A, B..."
+                defaultValue={getAddress().note}
+              />
+            </div>
           </section>
           <div className="w-full lg:w-[25%] self-start mt-24 lg:mt-0">
-            <OrderSummary address={address!} />
+            <OrderSummary
+              isAddressDone={address.street !== "" ? true : false}
+              address={address!}
+            />
           </div>
         </section>
       </main>

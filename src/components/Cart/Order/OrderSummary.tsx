@@ -15,9 +15,11 @@ import { useEffect, useState } from "react";
 
 export default function OrderSummary({
   address,
+  isAddressDone,
   payMethod,
 }: {
   address?: Address;
+  isAddressDone?: boolean;
   payMethod?: string;
 }) {
   const [selectedAddress, setSelectedAddress] = useState<Address>();
@@ -108,14 +110,7 @@ export default function OrderSummary({
           if (router.pathname === "/checkout") {
             router.push("/shipment");
           } else if (router.pathname === "/shipment") {
-            const isValid =
-              address &&
-              address.district !== "" &&
-              address.province !== "" &&
-              address.ward !== "" &&
-              address.street !== "";
-
-            if (!isValid) {
+            if (!isAddressDone) {
               toast({
                 title: "Please Select All Fields",
                 duration: 1500,
@@ -123,7 +118,7 @@ export default function OrderSummary({
                   "bg-[#fcbf49] text-white fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-2 sm:right-2 sm:top-auto sm:flex-col md:max-w-[420px] rounded-xl",
               });
             } else {
-              setAddress(address);
+              setAddress(address!);
               router.push("/payment");
             }
           } else if (router.pathname === "/payment") {
