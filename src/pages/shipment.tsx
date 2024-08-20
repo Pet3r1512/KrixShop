@@ -99,10 +99,6 @@ const Shipment = () => {
     setOrderId(new Date().getTime().toString().slice(-8));
   }, []);
 
-  useEffect(() => {
-    console.log(address);
-  }, [address]);
-
   return (
     <Layout pageName="Shipment">
       <main className="lg:my-8 my-4 min-h-screen lg:min-h-0 px-4 lg:px-0">
