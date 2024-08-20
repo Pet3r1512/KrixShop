@@ -97,6 +97,9 @@ const Shipment = () => {
       router.push("/shop");
     }
     setOrderId(new Date().getTime().toString().slice(-8));
+    if (address) {
+      setAddress(address);
+    }
   }, []);
 
   return (
@@ -189,7 +192,9 @@ const Shipment = () => {
               </label>
               <Select
                 disabled={
-                  getAddress().ward
+                  wards.length === 0
+                    ? true
+                    : getAddress().ward
                     ? false
                     : address.district !== "" && !wardsQuery.isLoading
                     ? false
@@ -204,7 +209,13 @@ const Shipment = () => {
                 defaultValue={getAddress().ward}
               >
                 <SelectTrigger className="lg:w-2/3">
-                  <SelectValue placeholder="Please select your ward" />
+                  <SelectValue
+                    placeholder={
+                      address.district && wards.length === 0
+                        ? "This district has no wards!"
+                        : "Please select your ward"
+                    }
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {wardsQuery.isLoading ? (
@@ -252,10 +263,7 @@ const Shipment = () => {
             </div>
           </section>
           <div className="w-full lg:w-[25%] self-start mt-24 lg:mt-0">
-            <OrderSummary
-              isAddressDone={address.street !== "" ? true : false}
-              address={address!}
-            />
+            <OrderSummary address={address} />
           </div>
         </section>
       </main>

@@ -15,14 +15,20 @@ import { useEffect, useState } from "react";
 
 export default function OrderSummary({
   address,
-  isAddressDone,
   payMethod,
 }: {
   address?: Address;
-  isAddressDone?: boolean;
   payMethod?: string;
 }) {
-  const [selectedAddress, setSelectedAddress] = useState<Address>();
+  const [selectedAddress, setSelectedAddress] = useState<Address>(
+    address || {
+      province: "",
+      district: "",
+      ward: "",
+      street: "",
+      note: "",
+    }
+  );
   const [step, setStep] = useState(0);
   const router = useRouter();
   const { getCurrentOrder } = useCart();
@@ -33,17 +39,12 @@ export default function OrderSummary({
     if (pathname === "/checkout") {
       setStep(1);
     } else if (pathname === "/shipment") {
+      setSelectedAddress(address || getAddress());
       setStep(2);
     } else {
       setStep(3);
     }
   }, [router.pathname]);
-
-  useEffect(() => {
-    if (!address) {
-      setSelectedAddress(getAddress());
-    }
-  }, []);
 
   return (
     <section className="flex-1">
@@ -73,24 +74,32 @@ export default function OrderSummary({
             <AccordionTrigger>Ship Location</AccordionTrigger>
             <AccordionContent className="lg:text-lg font-normal">
               <p>
-                {address
+                {address && address.province.split("|")[0] !== ""
                   ? address.province.split("|")[0]
-                  : selectedAddress?.province.split("|")[0]}
+                  : getAddress().province.split("|")[0]}
               </p>
               <p>
-                {address
+                {address && address.district.split("|")[0] !== ""
                   ? address.district.split("|")[0]
-                  : selectedAddress?.district.split("|")[0]}
+                  : getAddress().district.split("|")[0]}
               </p>
               <p>
                 <span>
-                  {address
+                  {address && address.ward.split("|")[0] !== ""
                     ? address.ward.split("|")[0]
-                    : selectedAddress?.ward.split("|")[0]}
+                    : getAddress().ward.split("|")[0]}
                 </span>
               </p>
-              <p>{address ? address.street : selectedAddress?.street}</p>
-              <p>{address ? address.note : selectedAddress?.note}</p>
+              <p>
+                {address && address.street.split("|")[0] !== ""
+                  ? address.street
+                  : getAddress().street}
+              </p>
+              <p>
+                {address && address.note && address.note.split("|")[0] !== ""
+                  ? address.note
+                  : getAddress().note}
+              </p>
             </AccordionContent>
           </AccordionItem>
         )}
@@ -110,7 +119,7 @@ export default function OrderSummary({
           if (router.pathname === "/checkout") {
             router.push("/shipment");
           } else if (router.pathname === "/shipment") {
-            if (!isAddressDone) {
+            if (!address && !getAddress()) {
               toast({
                 title: "Please Select All Fields",
                 duration: 1500,
