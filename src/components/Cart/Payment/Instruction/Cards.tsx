@@ -124,6 +124,7 @@ export default function Cards() {
         {supportedCards.map((card) => {
           return (
             <div
+              key={card.name}
               className={cn(
                 "relative rounded-xl p-2 py-0 border-2 border-white",
                 card.name === selectedCard ? "border-green-500" : ""
