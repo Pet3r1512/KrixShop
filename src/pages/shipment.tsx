@@ -26,21 +26,27 @@ export type Address = {
 };
 
 export type Province = {
-  province_id: number;
-  province_name: string;
-  province_type: string;
+  id: string;
+  name: string;
+  type: number;
+  typeText: string;
+  slug: string;
 };
 
 export type District = {
-  district_id: number;
-  district_name: string;
-  district_type: string;
+  id: string;
+  name: string;
+  provinceId: string;
+  typeText: string;
+  slug: string;
 };
 
 export type Ward = {
-  ward_id: number;
-  ward_name: string;
-  ward_type: string;
+  id: string;
+  name: string;
+  districtId: string;
+  typeText: string;
+  slug: string;
 };
 
 const Shipment = () => {
@@ -70,27 +76,30 @@ const Shipment = () => {
   }, [debouncedStreetInput, debouncedNote]);
 
   const provincesQuery = trpc.address.getProvinces.useQuery();
-  const provinces = provincesQuery.isSuccess ? provincesQuery.data.results : [];
+  const provinces = provincesQuery.isSuccess ? provincesQuery.data : [];
 
   const districtsQuery = trpc.address.getDistricts.useQuery({
-    province_id:
+    province_code:
       address.province.toString().split("|")[1] ||
       getAddress().province.toString().split("|")[1],
   });
-  const districts = districtsQuery.isSuccess ? districtsQuery.data.results : [];
+  const districts = districtsQuery.isSuccess ? districtsQuery.data : [];
 
   const wardsQuery = trpc.address.getWards.useQuery({
-    district_id:
+    district_code:
       address.district.toString().split("|")[1] ||
       getAddress().district.toString().split("|")[1],
   });
-  const wards = wardsQuery.isSuccess ? wardsQuery.data.results : [];
+  const wards = wardsQuery.isSuccess ? wardsQuery.data : [];
 
   useEffect(() => {
     if (readItems().length === 0) {
       router.push("/shop");
     }
     setOrderId(new Date().getTime().toString().slice(-8));
+    if (address) {
+      setAddress(address);
+    }
   }, []);
 
   return (
@@ -124,10 +133,10 @@ const Shipment = () => {
                     provinces.map((item: Province) => {
                       return (
                         <SelectItem
-                          key={item.province_id}
-                          value={item.province_name + "|" + item.province_id}
+                          key={item.id}
+                          value={item.name + "|" + item.id}
                         >
-                          {item.province_name}
+                          {item.name}
                         </SelectItem>
                       );
                     })
@@ -135,128 +144,126 @@ const Shipment = () => {
                 </SelectContent>
               </Select>
             </div>
-            {getAddress().district || (districts && address.province !== "") ? (
-              <div className="flex flex-col gap-y-3.5">
-                <label className="lg:text-lg font-semibold" htmlFor="province">
-                  District
-                </label>
-                <Select
-                  onValueChange={(e) => {
-                    setAddress((prevAddress) => ({
-                      ...prevAddress,
-                      district: e,
-                    }));
-                  }}
-                  defaultValue={getAddress().district}
-                >
-                  <SelectTrigger className="lg:w-2/3">
-                    <SelectValue placeholder="Please select your district" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {districtsQuery.isLoading ? (
-                      <span>Loading...</span>
-                    ) : (
-                      districts.map((item: District) => {
-                        return (
-                          <SelectItem
-                            key={item.district_id}
-                            value={item.district_name + "|" + item.district_id}
-                            defaultValue={getAddress().district}
-                          >
-                            {item.district_name}
-                          </SelectItem>
-                        );
-                      })
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
-            ) : (
-              <></>
-            )}
-            {getAddress().ward ||
-            (wards && address.province !== "" && address.district !== "") ? (
-              <div className="flex flex-col gap-y-3.5">
-                <label className="lg:text-lg font-semibold" htmlFor="province">
-                  Wards
-                </label>
-                <Select
-                  onValueChange={(e) => {
-                    setAddress((prevAddress) => ({
-                      ...prevAddress,
-                      ward: e,
-                    }));
-                  }}
-                  defaultValue={getAddress().ward}
-                >
-                  <SelectTrigger className="lg:w-2/3">
-                    <SelectValue placeholder="Please select your ward" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {wardsQuery.isLoading ? (
-                      <span>Loading...</span>
-                    ) : (
-                      wards.map((item: Ward) => {
-                        return (
-                          <SelectItem
-                            key={item.ward_id}
-                            value={item.ward_name + "|" + item.ward_id}
-                          >
-                            {item.ward_name}
-                          </SelectItem>
-                        );
-                      })
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
-            ) : (
-              <></>
-            )}
-            {getAddress().street ||
-            (address.province !== "" &&
-              address.district !== "" &&
-              address.ward !== "") ? (
-              <div className="flex flex-col gap-y-3.5">
-                <label className="lg:text-lg font-semibold" htmlFor="province">
-                  House Number and Street
-                </label>
-                <Input
-                  onChange={(e) => {
-                    setStreetInput(e.target.value);
-                  }}
-                  className="lg:w-2/3"
-                  placeholder="73 Lê Văn Sỹ"
-                  defaultValue={getAddress().street}
-                />
-              </div>
-            ) : (
-              <></>
-            )}
-            {getAddress().note ||
-            (address.province !== "" &&
-              address.district !== "" &&
-              address.ward !== "" &&
-              address.street !== "") ? (
-              <div className="flex flex-col gap-y-3.5">
-                <label className="lg:text-lg font-semibold" htmlFor="province">
-                  Note
-                </label>
-                <Input
-                  onChange={(e) => {
-                    setNote(e.target.value);
-                  }}
-                  className="lg:w-2/3"
-                  placeholder="Block A, B..."
-                  defaultValue={getAddress().note}
-                />
-              </div>
-            ) : (
-              <></>
-            )}
+            <div className="flex flex-col gap-y-3.5">
+              <label className="lg:text-lg font-semibold" htmlFor="province">
+                District
+              </label>
+              <Select
+                disabled={
+                  getAddress().district
+                    ? false
+                    : address.province !== "" && !districtsQuery.isLoading
+                    ? false
+                    : true
+                }
+                onValueChange={(e) => {
+                  setAddress((prevAddress) => ({
+                    ...prevAddress,
+                    district: e,
+                  }));
+                }}
+                defaultValue={getAddress().district}
+              >
+                <SelectTrigger className="lg:w-2/3">
+                  <SelectValue placeholder="Please select your district" />
+                </SelectTrigger>
+                <SelectContent>
+                  {districtsQuery.isLoading ? (
+                    <span>Loading...</span>
+                  ) : (
+                    districts.map((item: District) => {
+                      return (
+                        <SelectItem
+                          key={item.id}
+                          value={item.name + "|" + item.id}
+                          defaultValue={getAddress().district}
+                        >
+                          {item.name}
+                        </SelectItem>
+                      );
+                    })
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex flex-col gap-y-3.5">
+              <label className="lg:text-lg font-semibold" htmlFor="province">
+                Wards
+              </label>
+              <Select
+                disabled={
+                  wards.length === 0
+                    ? true
+                    : getAddress().ward
+                    ? false
+                    : address.district !== "" && !wardsQuery.isLoading
+                    ? false
+                    : true
+                }
+                onValueChange={(e) => {
+                  setAddress((prevAddress) => ({
+                    ...prevAddress,
+                    ward: e,
+                  }));
+                }}
+                defaultValue={getAddress().ward}
+              >
+                <SelectTrigger className="lg:w-2/3">
+                  <SelectValue
+                    placeholder={
+                      address.district && wards.length === 0
+                        ? "This district has no wards!"
+                        : "Please select your ward"
+                    }
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  {wardsQuery.isLoading ? (
+                    <span>Loading...</span>
+                  ) : (
+                    wards.map((item: Ward) => {
+                      return (
+                        <SelectItem
+                          key={item.id}
+                          value={item.name + "|" + item.id}
+                        >
+                          {item.name}
+                        </SelectItem>
+                      );
+                    })
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex flex-col gap-y-3.5">
+              <label className="lg:text-lg font-semibold" htmlFor="province">
+                House Number and Street
+              </label>
+              <Input
+                onChange={(e) => {
+                  setStreetInput(e.target.value);
+                }}
+                className="lg:w-2/3"
+                placeholder="73 Lê Văn Sỹ"
+                defaultValue={getAddress().street}
+              />
+            </div>
+            <div className="flex flex-col gap-y-3.5">
+              <label className="lg:text-lg font-semibold" htmlFor="province">
+                Note
+              </label>
+              <Input
+                onChange={(e) => {
+                  setNote(e.target.value);
+                }}
+                className="lg:w-2/3"
+                placeholder="Block A, B..."
+                defaultValue={getAddress().note}
+              />
+            </div>
           </section>
           <div className="w-full lg:w-[25%] self-start mt-24 lg:mt-0">
-            <OrderSummary address={address!} />
+            <OrderSummary address={address} />
           </div>
         </section>
       </main>
