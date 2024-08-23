@@ -5,6 +5,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useState } from "react";
 import { useCart } from "@/lib/hooks/useCart";
 import OrderSummary from "@/components/Cart/Order/OrderSummary";
+import OrderSummaryMobile from "@/components/Cart/Order/OrderSummaryMobile";
 
 export default function Checkout() {
   const [subtotal, setSubtotal] = useState(0);
@@ -16,7 +17,7 @@ export default function Checkout() {
       {readItems().length === 0 ? (
         <p className="px-4 lg:px-0">Empty cart!</p>
       ) : (
-        <main className="lg:my-8 my-4 min-h-screen lg:min-h-0 px-4 lg:px-0">
+        <main className="lg:my-8 my-4 h-[calc(100dvh-100px)] lg:min-h-0 px-4 lg:px-0 relative">
           <p className="text-2xl lg:text-4xl font-semibold">Checkout</p>
           <section className="flex flex-col lg:flex-row gap-x-10 mt-6">
             <ItemsTable subtotal={subtotal} setSubtotal={setSubtotal} />
@@ -24,6 +25,7 @@ export default function Checkout() {
               <OrderSummary />
             </div>
           </section>
+          <OrderSummaryMobile />
         </main>
       )}
     </Layout>

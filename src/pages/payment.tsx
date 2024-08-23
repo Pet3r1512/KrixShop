@@ -41,7 +41,7 @@ const Payment = () => {
 
   return (
     <Layout pageName="Payment">
-      <main className="lg:my-8 my-4 min-h-screen lg:min-h-0 px-4 lg:px-0">
+      <main className="lg:my-8 my-4 h-[calc(100vh-100px)] lg:min-h-0 px-4 lg:px-0">
         <p className="text-2xl lg:text-4xl font-semibold">Pay Method</p>
         <section className="flex flex-col lg:flex-row gap-x-10 mt-6">
           <div className="w-full lg:my-8 flex flex-col gap-y-8 min-h-full">
