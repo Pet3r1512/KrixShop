@@ -40,17 +40,17 @@ export default function LangChange() {
   const [cookies, setCookie] = useCookies(["NEXT_LOCALE"]);
 
   useEffect(() => {
-    if (cookies.NEXT_LOCALE === "en") {
-      setCurrentLang({
-        lang: "English",
-        img: "english.png",
-        locale: "en",
-      });
-    } else
+    if (cookies.NEXT_LOCALE === "vi") {
       setCurrentLang({
         lang: "Tiếng Việt",
         img: "vietnam.png",
         locale: "vi",
+      });
+    } else
+      setCurrentLang({
+        lang: "English",
+        img: "english.png",
+        locale: "en",
       });
   }, []);
 

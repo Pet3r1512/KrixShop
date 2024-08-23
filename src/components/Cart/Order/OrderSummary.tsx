@@ -13,8 +13,24 @@ import { Address } from "@/pages/shipment";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-export default function OrderSummary({ address }: { address?: Address }) {
-  const [selectedAddress, setSelectedAddress] = useState<Address>();
+export default function OrderSummary({
+  address,
+  payMethod,
+  cardVerified,
+}: {
+  address?: Address;
+  payMethod?: string;
+  cardVerified?: boolean;
+}) {
+  const [selectedAddress, setSelectedAddress] = useState<Address>(
+    address || {
+      province: "",
+      district: "",
+      ward: "",
+      street: "",
+      note: "",
+    }
+  );
   const [step, setStep] = useState(0);
   const router = useRouter();
   const { getCurrentOrder } = useCart();
@@ -25,17 +41,12 @@ export default function OrderSummary({ address }: { address?: Address }) {
     if (pathname === "/checkout") {
       setStep(1);
     } else if (pathname === "/shipment") {
+      setSelectedAddress(address || getAddress());
       setStep(2);
     } else {
       setStep(3);
     }
   }, [router.pathname]);
-
-  useEffect(() => {
-    if (!address) {
-      setSelectedAddress(getAddress());
-    }
-  }, []);
 
   return (
     <section className="flex-1">
@@ -65,24 +76,32 @@ export default function OrderSummary({ address }: { address?: Address }) {
             <AccordionTrigger>Ship Location</AccordionTrigger>
             <AccordionContent className="lg:text-lg font-normal">
               <p>
-                {address
+                {address && address.province.split("|")[0] !== ""
                   ? address.province.split("|")[0]
-                  : selectedAddress?.province.split("|")[0]}
+                  : getAddress().province.split("|")[0]}
               </p>
               <p>
-                {address
+                {address && address.district.split("|")[0] !== ""
                   ? address.district.split("|")[0]
-                  : selectedAddress?.district.split("|")[0]}
+                  : getAddress().district.split("|")[0]}
               </p>
               <p>
                 <span>
-                  {address
+                  {address && address.ward.split("|")[0] !== ""
                     ? address.ward.split("|")[0]
-                    : selectedAddress?.ward.split("|")[0]}
+                    : getAddress().ward.split("|")[0]}
                 </span>
               </p>
-              <p>{address ? address.street : selectedAddress?.street}</p>
-              <p>{address ? address.note : selectedAddress?.note}</p>
+              <p>
+                {address && address.street.split("|")[0] !== ""
+                  ? address.street
+                  : getAddress().street}
+              </p>
+              <p>
+                {address && address.note && address.note.split("|")[0] !== ""
+                  ? address.note
+                  : getAddress().note}
+              </p>
             </AccordionContent>
           </AccordionItem>
         )}
@@ -91,7 +110,7 @@ export default function OrderSummary({ address }: { address?: Address }) {
             <AccordionTrigger>Payment</AccordionTrigger>
             <AccordionContent className="lg:text-lg font-normal">
               <p>
-                Method: <span>Transfer</span>
+                Method: <span className="font-bold">{payMethod}</span>
               </p>
             </AccordionContent>
           </AccordionItem>
@@ -102,14 +121,7 @@ export default function OrderSummary({ address }: { address?: Address }) {
           if (router.pathname === "/checkout") {
             router.push("/shipment");
           } else if (router.pathname === "/shipment") {
-            const isValid =
-              address &&
-              address.district !== "" &&
-              address.province !== "" &&
-              address.ward !== "" &&
-              address.street !== "";
-
-            if (!isValid) {
+            if (!address && !getAddress()) {
               toast({
                 title: "Please Select All Fields",
                 duration: 1500,
@@ -117,10 +129,18 @@ export default function OrderSummary({ address }: { address?: Address }) {
                   "bg-[#fcbf49] text-white fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-2 sm:right-2 sm:top-auto sm:flex-col md:max-w-[420px] rounded-xl",
               });
             } else {
-              setAddress(address);
+              setAddress(address!);
               router.push("/payment");
             }
           } else if (router.pathname === "/payment") {
+            if (cardVerified) {
+              toast({
+                title: "Your Card Information Is Not Verified",
+                duration: 1500,
+                className:
+                  "bg-[#fcbf49] text-white fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-2 sm:right-2 sm:top-auto sm:flex-col md:max-w-[420px] rounded-xl",
+              });
+            }
           }
         }}
         className="w-full"

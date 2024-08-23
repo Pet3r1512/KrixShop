@@ -108,7 +108,7 @@ export default function NavBar() {
                     {t("shop")} <ChevronDown />
                   </Link>
                 </NavigationMenuTrigger>
-                <NavigationMenuContent className="grid grid-rows-2 grid-flow-col p-4 shadow-2xl rounded-xl absolute -left-[50%] mt-8 h-[550px] w-[950px] z-10 bg-white">
+                <NavigationMenuContent className="grid grid-rows-2 grid-flow-col p-4 shadow-2xl rounded-xl absolute -left-[50%] mt-8 h-[650px] w-[950px] z-10 bg-white">
                   {shop.map((item) => {
                     return (
                       <div
