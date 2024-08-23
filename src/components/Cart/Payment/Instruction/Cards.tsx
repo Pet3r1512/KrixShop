@@ -1,6 +1,6 @@
 import { Input } from "@/components/UI/ui/input";
 import { useDebounce } from "@/lib/hooks/useDebounce";
-import { cn } from "@/lib/utils";
+import { cn, formatCardNumber } from "@/lib/utils";
 import { Check, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -8,23 +8,24 @@ import { useEffect, useState } from "react";
 export default function Cards() {
   const [selectedCard, setSelectedCard] = useState("");
   const [typingCardNumber, setTypingCardNumber] = useState("");
+  const [formatted, setFormatted] = useState("");
   const [cardNumberCheck, setCardNumberCheck] = useState(true);
 
   const debouncedTypingCardNumber = useDebounce(typingCardNumber, 500);
 
   useEffect(() => {
-    if (typingCardNumber.match(cardPattern[selectedCard])) {
+    if (typingCardNumber.replace(/ /g, "").match(cardPattern[selectedCard])) {
       setCardNumberCheck(true);
     } else {
       setCardNumberCheck(false);
     }
-  }, [debouncedTypingCardNumber]);
+  }, [debouncedTypingCardNumber, selectedCard]);
 
   const cardPattern: Record<string, string> = {
-    Visa: "^4[0-9]{6,}$",
+    Visa: "^4[0-9]{12}(?:[0-9]{3})?$",
     "Master Card":
-      "^5[1-5][0-9]{5,}|222[1-9][0-9]{3,}|22[3-9][0-9]{4,}|2[3-6][0-9]{5,}|27[01][0-9]{4,}|2720[0-9]{3,}$",
-    "American Express": "^3[47][0-9]{5,}$",
+      "^5[1-5][0-9]{14}$|^2(22[1-9]|2[3-9][0-9]|[3-6][0-9]{2}|7[01][0-9]|720)[0-9]{12}$",
+    "American Express": "^3[47][0-9]{13}$",
   };
 
   const fields = [
@@ -41,18 +42,20 @@ export default function Cards() {
           <Input
             type="tel"
             inputMode="numeric"
-            maxLength={16}
+            maxLength={19}
             minLength={16}
+            value={formatted}
             onChange={(e) => {
               setTypingCardNumber(e.target.value);
+              setFormatted(formatCardNumber(e.target.value));
             }}
             pattern={cardPattern[selectedCard]}
           />
           {typingCardNumber !== "" &&
             (cardNumberCheck ? (
-              <Check className="text-green-500 right-2" />
+              <Check className="text-green-500 right-2 absolute top-1/2 -translate-y-1/2" />
             ) : (
-              <X className="text-red-500 right-2" />
+              <X className="text-red-500 right-2 absolute top-1/2 -translate-y-1/2" />
             ))}
         </div>
       ),
