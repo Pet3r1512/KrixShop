@@ -49,7 +49,7 @@ export default function OrderSummary({
   }, [router.pathname]);
 
   return (
-    <section className="flex-1">
+    <section className="flex-1 hidden lg:block">
       <p className="lg:text-2xl font-bold">Order Summary</p>
       <Accordion className="lg:text-xl font-semibold" type="multiple">
         {step >= 1 && (
