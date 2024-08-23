@@ -30,3 +30,12 @@ export function formatCurrency(
     ? formattedAmount
     : formattedAmount.replace("₫", "");
 }
+
+export function formatCardNumber(cardNumber: string) {
+  return (
+    cardNumber
+      .replace(/\D/g, "")
+      .match(/.{1,4}/g)
+      ?.join(" ") || cardNumber.replace(/\D/g, "")
+  );
+}
