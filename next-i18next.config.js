@@ -5,7 +5,7 @@ const nextI18Config = {
   debug: process.env.NODE_ENV === "development",
   i18n: {
     defaultLocale: "vi",
-    locales: ["en", "vi"],
+    locales: ["vi", "en"],
     localeDetection: false,
   },
   detection: {
