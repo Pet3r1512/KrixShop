@@ -5,7 +5,11 @@ import { Check, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function Cards() {
+export default function Cards({
+  cardVerified,
+}: {
+  cardVerified?: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [selectedCard, setSelectedCard] = useState("");
   const [typingCardNumber, setTypingCardNumber] = useState("");
   const [formatted, setFormatted] = useState("");

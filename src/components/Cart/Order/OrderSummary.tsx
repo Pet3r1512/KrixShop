@@ -16,9 +16,11 @@ import { useEffect, useState } from "react";
 export default function OrderSummary({
   address,
   payMethod,
+  cardVerified,
 }: {
   address?: Address;
   payMethod?: string;
+  cardVerified?: boolean;
 }) {
   const [selectedAddress, setSelectedAddress] = useState<Address>(
     address || {
@@ -131,6 +133,14 @@ export default function OrderSummary({
               router.push("/payment");
             }
           } else if (router.pathname === "/payment") {
+            if (cardVerified) {
+              toast({
+                title: "Your Card Information Is Not Verified",
+                duration: 1500,
+                className:
+                  "bg-[#fcbf49] text-white fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-2 sm:right-2 sm:top-auto sm:flex-col md:max-w-[420px] rounded-xl",
+              });
+            }
           }
         }}
         className="w-full"

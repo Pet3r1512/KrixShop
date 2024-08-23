@@ -15,6 +15,7 @@ export type PayMethod = "COD" | "Cards";
 
 const Payment = () => {
   const [payMethod, setPayMethod] = useState<PayMethod>("COD");
+  const [cardVerified, setCardVerified] = useState(false);
   const { getAddress } = useAddress();
 
   const router = useRouter();
@@ -34,7 +35,7 @@ const Payment = () => {
       getAddress().ward === "" &&
       getAddress().street === ""
     ) {
-      router.push("/shop");
+      router.push("/shipment");
     }
   }, []);
 
@@ -48,7 +49,7 @@ const Payment = () => {
             {PayMethodInstructionView[payMethod]}
           </div>
           <div className="w-full lg:w-[25%] self-start mt-24 lg:mt-0">
-            <OrderSummary payMethod={payMethod} />
+            <OrderSummary cardVerified={cardVerified} payMethod={payMethod} />
           </div>
         </section>
       </main>
