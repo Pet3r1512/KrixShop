@@ -36,13 +36,33 @@ export default function Cards({
 
   const { setCard } = useCard();
 
+  // Card patterns
+  const cardPattern: Record<string, string> = {
+    Visa: "^4[0-9]{12}(?:[0-9]{3})?$",
+    "Master Card":
+      "^5[1-5][0-9]{14}$|^2(22[1-9]|2[3-9][0-9]|[3-6][0-9]{2}|7[01][0-9]|720)[0-9]{12}$",
+    "American Express": "^3[47][0-9]{13}$",
+  };
+
   useEffect(() => {
-    if (typingCardNumber.replace(/ /g, "").match(cardPattern[selectedCard])) {
+    let foundCard = "";
+    let isValid = false;
+
+    for (const [card, pattern] of Object.entries(cardPattern)) {
+      if (new RegExp(pattern).test(typingCardNumber.replace(/ /g, ""))) {
+        foundCard = card;
+        isValid = true;
+        break;
+      }
+    }
+
+    if (isValid) {
+      setSelectedCard(foundCard);
       setCardNumberCheck(true);
     } else {
       setCardNumberCheck(false);
     }
-  }, [debouncedTypingCardNumber, selectedCard]);
+  }, [debouncedTypingCardNumber]);
 
   useEffect(() => {
     setTypedInfo((prev) => ({
@@ -53,18 +73,11 @@ export default function Cards({
         checked: cardNumberCheck,
       },
     }));
-  }, [cardNumberCheck]);
+  }, [cardNumberCheck, selectedCard]);
 
   useEffect(() => {
     setCard(typedInfo);
   }, [typedInfo]);
-
-  const cardPattern: Record<string, string> = {
-    Visa: "^4[0-9]{12}(?:[0-9]{3})?$",
-    "Master Card":
-      "^5[1-5][0-9]{14}$|^2(22[1-9]|2[3-9][0-9]|[3-6][0-9]{2}|7[01][0-9]|720)[0-9]{12}$",
-    "American Express": "^3[47][0-9]{13}$",
-  };
 
   const fields = [
     {
@@ -225,7 +238,7 @@ export default function Cards({
               key={card.name}
               className={cn(
                 "relative rounded-xl p-2 py-0 border-2 border-white",
-                card.name === selectedCard ? "border-green-500" : ""
+                card.name === selectedCard ? "border-green-500" : "opacity-50"
               )}
               onClick={() => {
                 setSelectedCard(card.name);
