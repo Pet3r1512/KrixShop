@@ -1,30 +1,43 @@
 import { Input } from "@/components/UI/ui/input";
+import { toast } from "@/components/UI/ui/use-toast";
+import { useCard } from "@/lib/hooks/useCard";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { cn, formatCardNumber } from "@/lib/utils";
 import { Check, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+export type CardInfo = {
+  bank: string;
+  name: string;
+  cardNumber: {
+    number: string;
+    checked: boolean;
+  };
+  cvv: string;
+  expired: {
+    month: string;
+    year: string;
+  };
+};
+
 export default function Cards({
-  cardVerified,
+  typedInfo,
+  setTypedInfo,
 }: {
-  cardVerified?: React.Dispatch<React.SetStateAction<boolean>>;
+  typedInfo: CardInfo;
+  setTypedInfo: React.Dispatch<React.SetStateAction<CardInfo>>;
 }) {
   const [selectedCard, setSelectedCard] = useState("");
   const [typingCardNumber, setTypingCardNumber] = useState("");
   const [formatted, setFormatted] = useState("");
-  const [cardNumberCheck, setCardNumberCheck] = useState(true);
+  const [cardNumberCheck, setCardNumberCheck] = useState(false);
 
   const debouncedTypingCardNumber = useDebounce(typingCardNumber, 500);
 
-  useEffect(() => {
-    if (typingCardNumber.replace(/ /g, "").match(cardPattern[selectedCard])) {
-      setCardNumberCheck(true);
-    } else {
-      setCardNumberCheck(false);
-    }
-  }, [debouncedTypingCardNumber, selectedCard]);
+  const { setCard } = useCard();
 
+  // Card patterns
   const cardPattern: Record<string, string> = {
     Visa: "^4[0-9]{12}(?:[0-9]{3})?$",
     "Master Card":
@@ -32,11 +45,63 @@ export default function Cards({
     "American Express": "^3[47][0-9]{13}$",
   };
 
+  useEffect(() => {
+    let foundCard = "";
+    let isValid = false;
+
+    for (const [card, pattern] of Object.entries(cardPattern)) {
+      if (new RegExp(pattern).test(typingCardNumber.replace(/ /g, ""))) {
+        foundCard = card;
+        isValid = true;
+        break;
+      }
+    }
+
+    if (isValid) {
+      if (foundCard !== selectedCard) {
+        toast({
+          title: "This Card Number Is Belong To " + foundCard,
+          duration: 1500,
+          className:
+            "bg-[#fcbf49] text-white fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-2 sm:right-2 sm:top-auto sm:flex-col md:max-w-[420px] rounded-xl",
+        });
+      }
+      setSelectedCard(foundCard);
+      setCardNumberCheck(true);
+    } else {
+      setCardNumberCheck(false);
+    }
+  }, [debouncedTypingCardNumber]);
+
+  useEffect(() => {
+    setTypedInfo((prev) => ({
+      ...prev,
+      bank: selectedCard,
+      cardNumber: {
+        number: typingCardNumber,
+        checked: cardNumberCheck,
+      },
+    }));
+  }, [cardNumberCheck, selectedCard]);
+
+  useEffect(() => {
+    setCard(typedInfo);
+  }, [typedInfo]);
+
   const fields = [
     {
       name: "name",
       label: "Cardholder Name",
-      component: <Input />,
+      component: (
+        <Input
+          onChange={(e) => {
+            setTypedInfo((prev) => ({
+              ...prev,
+              name: e.target.value,
+            }));
+          }}
+        />
+      ),
     },
     {
       name: "number",
@@ -67,7 +132,23 @@ export default function Cards({
     {
       name: "cvv",
       label: "CVV",
-      component: <Input type="number" maxLength={3} minLength={3} />,
+      component: (
+        <Input
+          onChange={(e) => {
+            let value = e.target.value;
+            if (/^\d{0,3}$/.test(value)) {
+              setTypedInfo((prev) => ({
+                ...prev,
+                cvv: value,
+              }));
+            }
+          }}
+          type="text"
+          inputMode="numeric"
+          maxLength={3}
+          placeholder="CVV"
+        />
+      ),
     },
     {
       name: "date",
@@ -75,19 +156,51 @@ export default function Cards({
       component: (
         <span className="expiration flex items-center gap-x-2.5 w-1/3">
           <Input
+            onChange={(e) => {
+              let value = parseInt(e.target.value, 10);
+              if (!isNaN(value) && value >= 1 && value <= 12) {
+                setTypedInfo((prev) => ({
+                  ...prev,
+                  expired: {
+                    ...prev.expired,
+                    month: value.toString(),
+                  },
+                }));
+              }
+            }}
             type="text"
             name="month"
             placeholder="MM"
+            min={1}
+            max={12}
+            inputMode="numeric"
             maxLength={2}
-            size={2}
           />
           <span>/</span>
           <Input
+            onChange={(e) => {
+              let value = parseInt(e.target.value, 10);
+              const currentYear = new Date().getFullYear();
+              if (
+                !isNaN(value) &&
+                value.toString().length === 4 &&
+                value >= currentYear
+              ) {
+                setTypedInfo((prev) => ({
+                  ...prev,
+                  expired: {
+                    ...prev.expired,
+                    year: value.toString(),
+                  },
+                }));
+              }
+            }}
             type="text"
             name="year"
-            placeholder="YY"
-            maxLength={2}
-            size={2}
+            placeholder="YYYY"
+            inputMode="numeric"
+            maxLength={4}
+            minLength={4}
           />
         </span>
       ),
@@ -134,7 +247,7 @@ export default function Cards({
               key={card.name}
               className={cn(
                 "relative rounded-xl p-2 py-0 border-2 border-white",
-                card.name === selectedCard ? "border-green-500" : ""
+                card.name === selectedCard ? "border-green-500" : "opacity-50"
               )}
               onClick={() => {
                 setSelectedCard(card.name);

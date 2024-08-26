@@ -1,5 +1,5 @@
 import OrderSummary from "@/components/Cart/Order/OrderSummary";
-import Cards from "@/components/Cart/Payment/Instruction/Cards";
+import Cards, { CardInfo } from "@/components/Cart/Payment/Instruction/Cards";
 import Cash from "@/components/Cart/Payment/Instruction/Cash";
 import PaymentMethods from "@/components/Cart/Payment/PaymentMethods";
 import Layout from "@/components/UI/Layout";
@@ -13,9 +13,23 @@ import { useEffect, useState } from "react";
 
 export type PayMethod = "COD" | "Cards";
 
+export const initCardInfo = {
+  bank: "",
+  name: "",
+  cardNumber: {
+    number: "",
+    checked: false,
+  },
+  cvv: "",
+  expired: {
+    month: "",
+    year: "",
+  },
+};
+
 const Payment = () => {
   const [payMethod, setPayMethod] = useState<PayMethod>("COD");
-  const [cardVerified, setCardVerified] = useState(false);
+  const [typedInfo, setTypedInfo] = useState<CardInfo>(initCardInfo);
   const { getAddress } = useAddress();
 
   const router = useRouter();
@@ -25,7 +39,7 @@ const Payment = () => {
     COD: (
       <Cash subtotal={formatCurrency(getCurrentOrder().subtotal.toString())} />
     ),
-    Cards: <Cards />,
+    Cards: <Cards typedInfo={typedInfo} setTypedInfo={setTypedInfo} />,
   };
 
   useEffect(() => {
@@ -41,15 +55,15 @@ const Payment = () => {
 
   return (
     <Layout pageName="Payment">
-      <main className="lg:my-8 my-4 min-h-screen lg:min-h-0 px-4 lg:px-0">
+      <main className="lg:my-8 my-4 h-[calc(100vh-100px)] sm:h-[calc(100vh-150px)] lg:min-h-0 px-4 lg:px-0">
         <p className="text-2xl lg:text-4xl font-semibold">Pay Method</p>
         <section className="flex flex-col lg:flex-row gap-x-10 mt-6">
-          <div className="w-full lg:my-8 flex flex-col gap-y-8 min-h-full">
+          <div className="w-full lg:my-8 flex flex-col gap-y-5 lg:gap-y-8 min-h-full">
             <PaymentMethods setPayMethod={setPayMethod} />
             {PayMethodInstructionView[payMethod]}
           </div>
           <div className="w-full lg:w-[25%] self-start mt-24 lg:mt-0">
-            <OrderSummary cardVerified={cardVerified} payMethod={payMethod} />
+            <OrderSummary payMethod={payMethod} typedInfo={typedInfo} />
           </div>
         </section>
       </main>

@@ -12,15 +12,17 @@ import { formatCurrency } from "@/lib/utils";
 import { Address } from "@/pages/shipment";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { CardInfo } from "../Payment/Instruction/Cards";
+import { useCard } from "@/lib/hooks/useCard";
 
 export default function OrderSummary({
   address,
   payMethod,
-  cardVerified,
+  typedInfo,
 }: {
   address?: Address;
   payMethod?: string;
-  cardVerified?: boolean;
+  typedInfo?: CardInfo;
 }) {
   const [selectedAddress, setSelectedAddress] = useState<Address>(
     address || {
@@ -35,6 +37,7 @@ export default function OrderSummary({
   const router = useRouter();
   const { getCurrentOrder } = useCart();
   const { setAddress, getAddress } = useAddress();
+  const { getCard, setCard } = useCard();
 
   useEffect(() => {
     let pathname = router.pathname;
@@ -49,7 +52,7 @@ export default function OrderSummary({
   }, [router.pathname]);
 
   return (
-    <section className="flex-1">
+    <section className="flex-1 hidden lg:block">
       <p className="lg:text-2xl font-bold">Order Summary</p>
       <Accordion className="lg:text-xl font-semibold" type="multiple">
         {step >= 1 && (
@@ -110,7 +113,10 @@ export default function OrderSummary({
             <AccordionTrigger>Payment</AccordionTrigger>
             <AccordionContent className="lg:text-lg font-normal">
               <p>
-                Method: <span className="font-bold">{payMethod}</span>
+                Method:{" "}
+                <span className="font-bold">
+                  {payMethod || getCard().bank || "COD"}
+                </span>
               </p>
             </AccordionContent>
           </AccordionItem>
@@ -133,13 +139,26 @@ export default function OrderSummary({
               router.push("/payment");
             }
           } else if (router.pathname === "/payment") {
-            if (cardVerified) {
+            setCard(typedInfo!);
+            console.log(getCard());
+            if (
+              payMethod !== "COD" &&
+              (getCard().bank === "" ||
+                getCard().name === "" ||
+                getCard().cardNumber.number === "" ||
+                getCard().cardNumber.checked === false ||
+                getCard().cvv === "" ||
+                getCard().expired.month === "" ||
+                getCard().expired.year === "")
+            ) {
               toast({
                 title: "Your Card Information Is Not Verified",
                 duration: 1500,
                 className:
                   "bg-[#fcbf49] text-white fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-2 sm:right-2 sm:top-auto sm:flex-col md:max-w-[420px] rounded-xl",
               });
+            } else {
+              router.push("/customer");
             }
           }
         }}
