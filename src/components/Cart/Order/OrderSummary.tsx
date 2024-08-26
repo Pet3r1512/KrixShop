@@ -13,7 +13,6 @@ import { Address } from "@/pages/shipment";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { CardInfo } from "../Payment/Instruction/Cards";
-import { initCardInfo } from "@/pages/payment";
 import { useCard } from "@/lib/hooks/useCard";
 
 export default function OrderSummary({
@@ -114,7 +113,10 @@ export default function OrderSummary({
             <AccordionTrigger>Payment</AccordionTrigger>
             <AccordionContent className="lg:text-lg font-normal">
               <p>
-                Method: <span className="font-bold">{payMethod}</span>
+                Method:{" "}
+                <span className="font-bold">
+                  {payMethod || getCard().bank || "COD"}
+                </span>
               </p>
             </AccordionContent>
           </AccordionItem>
