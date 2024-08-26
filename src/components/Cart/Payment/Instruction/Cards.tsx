@@ -1,4 +1,5 @@
 import { Input } from "@/components/UI/ui/input";
+import { toast } from "@/components/UI/ui/use-toast";
 import { useCard } from "@/lib/hooks/useCard";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { cn, formatCardNumber } from "@/lib/utils";
@@ -57,6 +58,14 @@ export default function Cards({
     }
 
     if (isValid) {
+      if (foundCard !== selectedCard) {
+        toast({
+          title: "This Card Number Is Belong To " + foundCard,
+          duration: 1500,
+          className:
+            "bg-[#fcbf49] text-white fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-2 sm:right-2 sm:top-auto sm:flex-col md:max-w-[420px] rounded-xl",
+        });
+      }
       setSelectedCard(foundCard);
       setCardNumberCheck(true);
     } else {
