@@ -105,12 +105,12 @@ const Shipment = () => {
 
   return (
     <Layout pageName="Shipment">
-      <main className="lg:my-8 my-4 h-[calc(100dvh-100px)] lg:min-h-0 px-4 lg:px-0">
+      <main className="lg:my-8 my-4 h-[calc(100dvh-100px)] sm:h-[calc(100vh-150px)] lg:min-h-0 px-4 lg:px-0">
         <p className="text-2xl lg:text-4xl font-semibold">
           Order ID: <span className="text-lg lg:text-2xl">{orderId}</span>
         </p>
         <section className="flex flex-col lg:flex-row gap-x-10 mt-6">
-          <section className="w-full lg:my-8 flex flex-col gap-y-8 min-h-full">
+          <section className="w-full lg:my-8 flex flex-col gap-y-5 lg:gap-y-8 min-h-full">
             <div className="flex flex-col gap-y-3.5">
               <label className="lg:text-lg font-semibold" htmlFor="province">
                 Province/City

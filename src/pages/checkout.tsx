@@ -17,7 +17,7 @@ export default function Checkout() {
       {readItems().length === 0 ? (
         <p className="px-4 lg:px-0">Empty cart!</p>
       ) : (
-        <main className="lg:my-8 my-4 h-[calc(100dvh-100px)] lg:min-h-0 px-4 lg:px-0 relative">
+        <main className="lg:my-8 my-4 h-[calc(100dvh-100px)] sm:h-[calc(100vh-150px)] lg:min-h-0 px-4 lg:px-0 relative">
           <p className="text-2xl lg:text-4xl font-semibold">Checkout</p>
           <section className="flex flex-col lg:flex-row gap-x-10 mt-6">
             <ItemsTable subtotal={subtotal} setSubtotal={setSubtotal} />
