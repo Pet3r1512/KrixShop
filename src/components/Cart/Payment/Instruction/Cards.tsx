@@ -1,21 +1,40 @@
 import { Input } from "@/components/UI/ui/input";
+import { useCard } from "@/lib/hooks/useCard";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { cn, formatCardNumber } from "@/lib/utils";
 import { Check, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+export type CardInfo = {
+  bank: string;
+  name: string;
+  cardNumber: {
+    number: string;
+    checked: boolean;
+  };
+  cvv: string;
+  expired: {
+    month: string;
+    year: string;
+  };
+};
+
 export default function Cards({
-  cardVerified,
+  typedInfo,
+  setTypedInfo,
 }: {
-  cardVerified?: React.Dispatch<React.SetStateAction<boolean>>;
+  typedInfo: CardInfo;
+  setTypedInfo: React.Dispatch<React.SetStateAction<CardInfo>>;
 }) {
   const [selectedCard, setSelectedCard] = useState("");
   const [typingCardNumber, setTypingCardNumber] = useState("");
   const [formatted, setFormatted] = useState("");
-  const [cardNumberCheck, setCardNumberCheck] = useState(true);
+  const [cardNumberCheck, setCardNumberCheck] = useState(false);
 
   const debouncedTypingCardNumber = useDebounce(typingCardNumber, 500);
+
+  const { setCard } = useCard();
 
   useEffect(() => {
     if (typingCardNumber.replace(/ /g, "").match(cardPattern[selectedCard])) {
@@ -24,6 +43,21 @@ export default function Cards({
       setCardNumberCheck(false);
     }
   }, [debouncedTypingCardNumber, selectedCard]);
+
+  useEffect(() => {
+    setTypedInfo((prev) => ({
+      ...prev,
+      bank: selectedCard,
+      cardNumber: {
+        number: typingCardNumber,
+        checked: cardNumberCheck,
+      },
+    }));
+  }, [cardNumberCheck]);
+
+  useEffect(() => {
+    setCard(typedInfo);
+  }, [typedInfo]);
 
   const cardPattern: Record<string, string> = {
     Visa: "^4[0-9]{12}(?:[0-9]{3})?$",
@@ -36,7 +70,16 @@ export default function Cards({
     {
       name: "name",
       label: "Cardholder Name",
-      component: <Input />,
+      component: (
+        <Input
+          onChange={(e) => {
+            setTypedInfo((prev) => ({
+              ...prev,
+              name: e.target.value,
+            }));
+          }}
+        />
+      ),
     },
     {
       name: "number",
@@ -67,7 +110,23 @@ export default function Cards({
     {
       name: "cvv",
       label: "CVV",
-      component: <Input type="number" maxLength={3} minLength={3} />,
+      component: (
+        <Input
+          onChange={(e) => {
+            let value = e.target.value;
+            if (/^\d{0,3}$/.test(value)) {
+              setTypedInfo((prev) => ({
+                ...prev,
+                cvv: value,
+              }));
+            }
+          }}
+          type="text"
+          inputMode="numeric"
+          maxLength={3}
+          placeholder="CVV"
+        />
+      ),
     },
     {
       name: "date",
@@ -75,19 +134,51 @@ export default function Cards({
       component: (
         <span className="expiration flex items-center gap-x-2.5 w-1/3">
           <Input
+            onChange={(e) => {
+              let value = parseInt(e.target.value, 10);
+              if (!isNaN(value) && value >= 1 && value <= 12) {
+                setTypedInfo((prev) => ({
+                  ...prev,
+                  expired: {
+                    ...prev.expired,
+                    month: value.toString(),
+                  },
+                }));
+              }
+            }}
             type="text"
             name="month"
             placeholder="MM"
+            min={1}
+            max={12}
+            inputMode="numeric"
             maxLength={2}
-            size={2}
           />
           <span>/</span>
           <Input
+            onChange={(e) => {
+              let value = parseInt(e.target.value, 10);
+              const currentYear = new Date().getFullYear();
+              if (
+                !isNaN(value) &&
+                value.toString().length === 4 &&
+                value >= currentYear
+              ) {
+                setTypedInfo((prev) => ({
+                  ...prev,
+                  expired: {
+                    ...prev.expired,
+                    year: value.toString(),
+                  },
+                }));
+              }
+            }}
             type="text"
             name="year"
-            placeholder="YY"
-            maxLength={2}
-            size={2}
+            placeholder="YYYY"
+            inputMode="numeric"
+            maxLength={4}
+            minLength={4}
           />
         </span>
       ),
