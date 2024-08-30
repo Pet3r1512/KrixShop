@@ -27,27 +27,21 @@ export type Address = {
 };
 
 export type Province = {
-  id: string;
-  name: string;
-  type: number;
-  typeText: string;
-  slug: string;
+  province_id: number;
+  province_name: string;
+  province_type: string;
 };
 
 export type District = {
-  id: string;
-  name: string;
-  provinceId: string;
-  typeText: string;
-  slug: string;
+  district_id: number;
+  district_name: string;
+  district_type: string;
 };
 
 export type Ward = {
-  id: string;
-  name: string;
-  districtId: string;
-  typeText: string;
-  slug: string;
+  ward_id: number;
+  ward_name: string;
+  ward_type: string;
 };
 
 const Shipment = () => {
@@ -77,21 +71,17 @@ const Shipment = () => {
   }, [debouncedStreetInput, debouncedNote]);
 
   const provincesQuery = trpc.address.getProvinces.useQuery();
-  const provinces = provincesQuery.isSuccess ? provincesQuery.data : [];
+  const provinces = provincesQuery.isSuccess ? provincesQuery.data.results : [];
 
   const districtsQuery = trpc.address.getDistricts.useQuery({
-    province_code:
-      address.province.toString().split("|")[1] ||
-      getAddress().province.toString().split("|")[1],
+    province_id: address.province.toString().split("|")[1],
   });
-  const districts = districtsQuery.isSuccess ? districtsQuery.data : [];
+  const districts = districtsQuery.isSuccess ? districtsQuery.data.results : [];
 
   const wardsQuery = trpc.address.getWards.useQuery({
-    district_code:
-      address.district.toString().split("|")[1] ||
-      getAddress().district.toString().split("|")[1],
+    district_id: address.district.toString().split("|")[1],
   });
-  const wards = wardsQuery.isSuccess ? wardsQuery.data : [];
+  const wards = wardsQuery.isSuccess ? wardsQuery.data.results : [];
 
   useEffect(() => {
     if (readItems().length === 0) {
@@ -134,10 +124,10 @@ const Shipment = () => {
                     provinces.map((item: Province) => {
                       return (
                         <SelectItem
-                          key={item.id}
-                          value={item.name + "|" + item.id}
+                          key={item.province_id}
+                          value={item.province_name + "|" + item.province_id}
                         >
-                          {item.name}
+                          {item.province_name}
                         </SelectItem>
                       );
                     })
@@ -146,17 +136,11 @@ const Shipment = () => {
               </Select>
             </div>
             <div className="flex flex-col gap-y-3.5">
-              <label className="lg:text-lg font-semibold" htmlFor="province">
+              <label className="lg:text-lg font-semibold" htmlFor="district">
                 District
               </label>
               <Select
-                disabled={
-                  getAddress().district
-                    ? false
-                    : address.province !== "" && !districtsQuery.isLoading
-                    ? false
-                    : true
-                }
+                disabled={districtsQuery.isLoading || districts.length === 0}
                 onValueChange={(e) => {
                   setAddress((prevAddress) => ({
                     ...prevAddress,
@@ -175,11 +159,11 @@ const Shipment = () => {
                     districts.map((item: District) => {
                       return (
                         <SelectItem
-                          key={item.id}
-                          value={item.name + "|" + item.id}
+                          key={item.district_id}
+                          value={item.district_name + "|" + item.district_id}
                           defaultValue={getAddress().district}
                         >
-                          {item.name}
+                          {item.district_name}
                         </SelectItem>
                       );
                     })
@@ -188,7 +172,7 @@ const Shipment = () => {
               </Select>
             </div>
             <div className="flex flex-col gap-y-3.5">
-              <label className="lg:text-lg font-semibold" htmlFor="province">
+              <label className="lg:text-lg font-semibold" htmlFor="ward">
                 Wards
               </label>
               <Select
@@ -225,10 +209,10 @@ const Shipment = () => {
                     wards.map((item: Ward) => {
                       return (
                         <SelectItem
-                          key={item.id}
-                          value={item.name + "|" + item.id}
+                          key={item.ward_id}
+                          value={item.ward_name + "|" + item.ward_id}
                         >
-                          {item.name}
+                          {item.ward_name}
                         </SelectItem>
                       );
                     })
