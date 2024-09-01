@@ -259,7 +259,7 @@ const Shipment = () => {
             </div>
             <div className="flex flex-col gap-y-3.5">
               <label className="lg:text-lg font-semibold" htmlFor="name">
-                Receiver's Name
+                {"Receiver's Name"}
               </label>
               <Input
                 onChange={(e) => {
