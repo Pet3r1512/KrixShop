@@ -11,6 +11,7 @@ import {
 } from "@/components/UI/ui/select";
 import { useAddress } from "@/lib/hooks/useAddress";
 import { useCart } from "@/lib/hooks/useCart";
+import { useCustomer } from "@/lib/hooks/useCustomer";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { trpc } from "@/server/utils/tRPC";
 import { GetServerSideProps } from "next";
@@ -44,6 +45,11 @@ export type Ward = {
   ward_type: string;
 };
 
+export type CustomerInfo = {
+  name: string;
+  phone_number: string;
+};
+
 const Shipment = () => {
   const [address, setAddress] = useState<Address>({
     province: "",
@@ -52,10 +58,15 @@ const Shipment = () => {
     street: "",
     note: "",
   });
+  const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
+    name: "",
+    phone_number: "",
+  });
   const [orderId, setOrderId] = useState("");
   const [streetInput, setStreetInput] = useState("");
   const [note, setNote] = useState("");
   const { readItems } = useCart();
+  const { setCustomer } = useCustomer();
   const { getAddress } = useAddress();
   const router = useRouter();
 
@@ -221,7 +232,7 @@ const Shipment = () => {
               </Select>
             </div>
             <div className="flex flex-col gap-y-3.5">
-              <label className="lg:text-lg font-semibold" htmlFor="province">
+              <label className="lg:text-lg font-semibold" htmlFor="street">
                 House Number and Street
               </label>
               <Input
@@ -234,7 +245,7 @@ const Shipment = () => {
               />
             </div>
             <div className="flex flex-col gap-y-3.5">
-              <label className="lg:text-lg font-semibold" htmlFor="province">
+              <label className="lg:text-lg font-semibold" htmlFor="note">
                 Note
               </label>
               <Input
@@ -244,6 +255,40 @@ const Shipment = () => {
                 className="lg:w-2/3"
                 placeholder="Block A, B..."
                 defaultValue={getAddress().note}
+              />
+            </div>
+            <div className="flex flex-col gap-y-3.5">
+              <label className="lg:text-lg font-semibold" htmlFor="name">
+                Receiver's Name
+              </label>
+              <Input
+                onChange={(e) => {
+                  setCustomerInfo((prev) => ({
+                    ...prev,
+                    name: e.target.value,
+                  }));
+                }}
+                className="lg:w-2/3"
+                placeholder="John Doe"
+              />
+            </div>
+            <div className="flex flex-col gap-y-3.5">
+              <label
+                className="lg:text-lg font-semibold"
+                htmlFor="phone_number"
+              >
+                Phone Number
+              </label>
+              <Input
+                onChange={(e) => {
+                  setCustomerInfo((prev) => ({
+                    ...prev,
+                    phone_number: e.target.value,
+                  }));
+                }}
+                pattern="/([\+84|84|0]+(3|5|7|8|9|1[2|6|8|9]))+([0-9]{8})\b/"
+                className="lg:w-2/3"
+                placeholder="076 000 xxxx"
               />
             </div>
           </section>
