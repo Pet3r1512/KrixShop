@@ -168,7 +168,7 @@ export default function OrderSummary({
                   "bg-[#fcbf49] text-white fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-2 sm:right-2 sm:top-auto sm:flex-col md:max-w-[420px] rounded-xl",
               });
             } else {
-              router.push("/customer");
+              router.push("/summary");
             }
           }
         }}
