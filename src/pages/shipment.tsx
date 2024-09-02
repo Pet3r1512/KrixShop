@@ -79,7 +79,6 @@ const Shipment = () => {
       name: debounceCustomerName,
       phone_number: debouncePhoneNumber,
     });
-    console.log(getCustomer());
   }, [
     debouncedStreetInput,
     debouncedNote,
