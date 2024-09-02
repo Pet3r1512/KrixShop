@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { CardInfo } from "../Payment/Instruction/Cards";
 import { useCard } from "@/lib/hooks/useCard";
+import { useCustomer } from "@/lib/hooks/useCustomer";
 
 export default function OrderSummary({
   address,
@@ -38,6 +39,7 @@ export default function OrderSummary({
   const { getCurrentOrder } = useCart();
   const { setAddress, getAddress } = useAddress();
   const { getCard, setCard } = useCard();
+  const { getCustomer, setCustomer } = useCustomer();
 
   useEffect(() => {
     let pathname = router.pathname;
@@ -127,7 +129,15 @@ export default function OrderSummary({
           if (router.pathname === "/checkout") {
             router.push("/shipment");
           } else if (router.pathname === "/shipment") {
-            if (!address && !getAddress()) {
+            if (
+              !address &&
+              (getAddress().province === "" ||
+                getAddress().district === "" ||
+                getAddress().ward === "" ||
+                getAddress().street === "" ||
+                getCustomer().name === "" ||
+                getCustomer().phone_number === "")
+            ) {
               toast({
                 title: "Please Select All Fields",
                 duration: 1500,
@@ -136,11 +146,11 @@ export default function OrderSummary({
               });
             } else {
               setAddress(address!);
+              setCustomer(getCustomer());
               router.push("/payment");
             }
           } else if (router.pathname === "/payment") {
             setCard(typedInfo!);
-            console.log(getCard());
             if (
               payMethod !== "COD" &&
               (getCard().bank === "" ||

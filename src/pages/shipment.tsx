@@ -51,27 +51,23 @@ export type CustomerInfo = {
 };
 
 const Shipment = () => {
-  const [address, setAddress] = useState<Address>({
-    province: "",
-    district: "",
-    ward: "",
-    street: "",
-    note: "",
-  });
-  const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
-    name: "",
-    phone_number: "",
-  });
+  const { readItems } = useCart();
+  const { setCustomer, getCustomer } = useCustomer();
+  const { getAddress } = useAddress();
+  const [address, setAddress] = useState<Address>(getAddress());
   const [orderId, setOrderId] = useState("");
   const [streetInput, setStreetInput] = useState("");
   const [note, setNote] = useState("");
-  const { readItems } = useCart();
-  const { setCustomer } = useCustomer();
-  const { getAddress } = useAddress();
+  const [customerName, setCustomerName] = useState(getCustomer().name);
+  const [customerPhone, setCustomerPhone] = useState(
+    getCustomer().phone_number
+  );
   const router = useRouter();
 
   const debouncedStreetInput = useDebounce(streetInput, 750);
   const debouncedNote = useDebounce(note, 750);
+  const debounceCustomerName = useDebounce(customerName, 750);
+  const debouncePhoneNumber = useDebounce(customerPhone, 750);
 
   useEffect(() => {
     setAddress((prevAddress) => ({
@@ -79,7 +75,17 @@ const Shipment = () => {
       street: debouncedStreetInput,
       note: debouncedNote,
     }));
-  }, [debouncedStreetInput, debouncedNote]);
+    setCustomer({
+      name: debounceCustomerName,
+      phone_number: debouncePhoneNumber,
+    });
+    console.log(getCustomer());
+  }, [
+    debouncedStreetInput,
+    debouncedNote,
+    debounceCustomerName,
+    debouncePhoneNumber,
+  ]);
 
   const provincesQuery = trpc.address.getProvinces.useQuery();
   const provinces = provincesQuery.isSuccess ? provincesQuery.data.results : [];
@@ -263,13 +269,11 @@ const Shipment = () => {
               </label>
               <Input
                 onChange={(e) => {
-                  setCustomerInfo((prev) => ({
-                    ...prev,
-                    name: e.target.value,
-                  }));
+                  setCustomerName(e.target.value);
                 }}
                 className="lg:w-2/3"
                 placeholder="John Doe"
+                defaultValue={getCustomer().name}
               />
             </div>
             <div className="flex flex-col gap-y-3.5">
@@ -281,12 +285,15 @@ const Shipment = () => {
               </label>
               <Input
                 onChange={(e) => {
-                  setCustomerInfo((prev) => ({
-                    ...prev,
-                    phone_number: e.target.value,
-                  }));
+                  const input = e.target.value;
+                  const cleanedInput = input.replace(/\D/g, "");
+                  if (cleanedInput.length <= 10) {
+                    setCustomerPhone(cleanedInput);
+                  }
                 }}
-                pattern="/([\+84|84|0]+(3|5|7|8|9|1[2|6|8|9]))+([0-9]{8})\b/"
+                value={customerPhone}
+                pattern="[0-9]{10}"
+                maxLength={10}
                 className="lg:w-2/3"
                 placeholder="076 000 xxxx"
               />
