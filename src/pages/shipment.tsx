@@ -11,6 +11,7 @@ import {
 } from "@/components/UI/ui/select";
 import { useAddress } from "@/lib/hooks/useAddress";
 import { useCart } from "@/lib/hooks/useCart";
+import { useCustomer } from "@/lib/hooks/useCustomer";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { trpc } from "@/server/utils/tRPC";
 import { GetServerSideProps } from "next";
@@ -44,23 +45,29 @@ export type Ward = {
   ward_type: string;
 };
 
+export type CustomerInfo = {
+  name: string;
+  phone_number: string;
+};
+
 const Shipment = () => {
-  const [address, setAddress] = useState<Address>({
-    province: "",
-    district: "",
-    ward: "",
-    street: "",
-    note: "",
-  });
+  const { readItems } = useCart();
+  const { setCustomer, getCustomer } = useCustomer();
+  const { getAddress } = useAddress();
+  const [address, setAddress] = useState<Address>(getAddress());
   const [orderId, setOrderId] = useState("");
   const [streetInput, setStreetInput] = useState("");
   const [note, setNote] = useState("");
-  const { readItems } = useCart();
-  const { getAddress } = useAddress();
+  const [customerName, setCustomerName] = useState(getCustomer().name);
+  const [customerPhone, setCustomerPhone] = useState(
+    getCustomer().phone_number
+  );
   const router = useRouter();
 
   const debouncedStreetInput = useDebounce(streetInput, 750);
   const debouncedNote = useDebounce(note, 750);
+  const debounceCustomerName = useDebounce(customerName, 750);
+  const debouncePhoneNumber = useDebounce(customerPhone, 750);
 
   useEffect(() => {
     setAddress((prevAddress) => ({
@@ -68,7 +75,16 @@ const Shipment = () => {
       street: debouncedStreetInput,
       note: debouncedNote,
     }));
-  }, [debouncedStreetInput, debouncedNote]);
+    setCustomer({
+      name: debounceCustomerName,
+      phone_number: debouncePhoneNumber,
+    });
+  }, [
+    debouncedStreetInput,
+    debouncedNote,
+    debounceCustomerName,
+    debouncePhoneNumber,
+  ]);
 
   const provincesQuery = trpc.address.getProvinces.useQuery();
   const provinces = provincesQuery.isSuccess ? provincesQuery.data.results : [];
@@ -221,7 +237,7 @@ const Shipment = () => {
               </Select>
             </div>
             <div className="flex flex-col gap-y-3.5">
-              <label className="lg:text-lg font-semibold" htmlFor="province">
+              <label className="lg:text-lg font-semibold" htmlFor="street">
                 House Number and Street
               </label>
               <Input
@@ -234,7 +250,7 @@ const Shipment = () => {
               />
             </div>
             <div className="flex flex-col gap-y-3.5">
-              <label className="lg:text-lg font-semibold" htmlFor="province">
+              <label className="lg:text-lg font-semibold" htmlFor="note">
                 Note
               </label>
               <Input
@@ -244,6 +260,41 @@ const Shipment = () => {
                 className="lg:w-2/3"
                 placeholder="Block A, B..."
                 defaultValue={getAddress().note}
+              />
+            </div>
+            <div className="flex flex-col gap-y-3.5">
+              <label className="lg:text-lg font-semibold" htmlFor="name">
+                {"Receiver's Name"}
+              </label>
+              <Input
+                onChange={(e) => {
+                  setCustomerName(e.target.value);
+                }}
+                className="lg:w-2/3"
+                placeholder="John Doe"
+                defaultValue={getCustomer().name}
+              />
+            </div>
+            <div className="flex flex-col gap-y-3.5">
+              <label
+                className="lg:text-lg font-semibold"
+                htmlFor="phone_number"
+              >
+                Phone Number
+              </label>
+              <Input
+                onChange={(e) => {
+                  const input = e.target.value;
+                  const cleanedInput = input.replace(/\D/g, "");
+                  if (cleanedInput.length <= 10) {
+                    setCustomerPhone(cleanedInput);
+                  }
+                }}
+                value={customerPhone}
+                pattern="[0-9]{10}"
+                maxLength={10}
+                className="lg:w-2/3"
+                placeholder="076 000 xxxx"
               />
             </div>
           </section>
